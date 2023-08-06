@@ -1,65 +1,58 @@
 import { useState } from "react";
 
-type TBooleanCarcase = Record<string, boolean>
-type TList = Record<string, Record<string, any>>
+const rawTree = [
+  { id: 1, title: "a", children: [{ id: 4, title: "d", children: [] }] },
+  { id: 2, title: "b", children: [] },
+  {
+    id: 3,
+    title: "c",
+    children: [
+      { id: 5, title: "z", children: [] },
+      { id: 6, title: "x", children: [] },
+      { id: 7, title: "y", children: [] },
+    ],
+  },
+];
+
+const getFormattedTree = (
+  rawTree,
+  formattedTree = [],
+  parentId = null,
+  depth = 1
+) => {
+  for (const rawTreeNode of rawTree) {
+    const { id, title } = rawTreeNode;
+    const childrenIds = rawTreeNode.children.reduce((childrenIds, child) => {
+      childrenIds.push(child.id);
+      return childrenIds;
+    }, []);
+    const formattedTreeNode = {
+      id,
+      title,
+      childrenIds,
+      parentId,
+      depth,
+      opened: true,
+    };
+    formattedTree.push(formattedTreeNode);
+    if (childrenIds.length === 0) {
+      continue;
+    }
+    getFormattedTree(rawTreeNode.children, formattedTree, id, depth + 1);
+  }
+  return formattedTree;
+};
 
 export const List = () => {
-  const obj = {
-    a: { d: {} },
-    b: {},
-    c: { z: { f: {} }, x: {}, l: {} },
-  };
-  const createBooleanCarcase = (
-    obj: TList,
-    BooleanCarcase: TBooleanCarcase = {}
-  ) => {
-    for (const [key, value] of Object.entries(obj)) {
-      BooleanCarcase[key] = false;
-      if (Object.keys(value).length !== 0) {
-        createBooleanCarcase(value, BooleanCarcase);
-      }
-    }
-    return BooleanCarcase;
-  };
+  const [tree, setTree] = useState(getFormattedTree(rawTree));
 
-  const [list, setList] = useState(obj);
-  const [carcase, setCarcase] = useState<TBooleanCarcase>(createBooleanCarcase(list));
-
-
-  const onClick2 = (name: string, e: React.MouseEvent) => {
-    console.log("click");
-    console.log(name);
-    setCarcase((prev) => ({
-      ...prev,
-      [name]: !prev[name],
-    }));
-  };
-
-  const getList = (obj: Record<string, any>) => {
-    const children = [];
-    for (const [key, value] of Object.entries(obj)) {
-      if (Object.keys(value).length === 0) {
-        const li = (
-          <li key={key}>
-            <span onClick={(e) => onClick2(key, e)}>{key}</span>
-          </li>
-        );
-        children.push(li);
-      } else {
-        const li = (
-          <li key={key}>
-            <span onClick={(e) => onClick2(key, e)}>{key}</span>
-            <ul hidden={carcase[key]}>{getList(value)}</ul>
-          </li>
-        );
-        children.push(li);
-      }
-    }
-    //return Object.keys(obj).map(key => <li key={key}>{key}</li>)
-    return children;
-  };
-
-  const ul = <ul>{getList(obj)}</ul>;
-
-  return <>{ul}</>;
+  return (
+    <ul>
+      {tree.map((treeNode) => (
+        <li style={{ marginLeft: (treeNode.depth - 1) * 10 }} key={treeNode.id}>
+          {treeNode.title}
+        </li>
+      ))}
+    </ul>
+  );
 };
