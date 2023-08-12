@@ -8,51 +8,63 @@ window.rawTree = [
     title: "c",
     children: [
       { id: 5, title: "z", children: [] },
-      { id: 6, title: "x", children: [] },
+      { id: 6, title: "x", children: [{ id: 10, title: "gg", children: [] }] },
       { id: 7, title: "y", children: [] },
     ],
   },
 ];
 
-window.getFormattedTree = (rawTree, formattedTree = [], parentId = null) => {
+const myState = {
+  root: [1, 2, 3],
+  map: {
+    5: { id: 5, title: "z", children: { id: 9 } },
+  },
+};
+
+window.getFormattedTree = (
+  rawTree,
+  rootIds = [],
+  parentId = null,
+  map = {}
+) => {
   for (const rawTreeNode of rawTree) {
-    const { id, title } = rawTreeNode;
-    const childrenIds = rawTreeNode.children.reduce((childrenIds, child) => {
-      childrenIds.push(child.id);
-      return childrenIds;
-    }, []);
+    const { id, title, children } = rawTreeNode;
     const formattedTreeNode = {
       id,
       title,
-      childrenIds,
+      children,
       parentId,
     };
-    formattedTree.push(formattedTreeNode);
-    if (childrenIds.length === 0) {
+    if (formattedTreeNode.parentId === null) {
+      rootIds.push(formattedTreeNode);
+    }
+    map[id] = formattedTreeNode;
+    if (children.length === 0) {
       continue;
     }
-    getFormattedTree(rawTreeNode.children, formattedTree, id);
+    getFormattedTree(rawTreeNode.children, rootIds, id, map);
   }
-  return formattedTree;
+  return { rootIds, map };
+};
+
+window.getRenderSubtree = (renderTree, subtree, depth) => {
+  for (const node of subtree) {
+    node.depth = depth;
+    renderTree.push(node);
+    if (node.children.length !== 0) {
+      getRenderSubtree(renderTree, node.children, depth + 1);
+    }
+  }
 };
 
 window.getRenderTree = (formattedTree) => {
   const renderTree = [];
-  for (const parentNode of formattedTree) {
-    {
-      if (!renderTree.includes(parentNode)) {
-        renderTree.push(parentNode);
-      }
-    }
-    if (parentNode.childrenIds.length === 0) {
-      continue;
-    }
-    for (const childNode of formattedTree) {
-      if (parentNode.childrenIds.includes(childNode.id)) {
-        if (!renderTree.includes(childNode)) {
-          renderTree.push(childNode);
-        }
-      }
+  for (const rootId of formattedTree.rootIds) {
+    const node = formattedTree.map[rootId.id];
+    node.depth = 1;
+    renderTree.push(node);
+    if (node.children.length !== 0) {
+      window.getRenderSubtree(renderTree, node.children, node.depth + 1);
     }
   }
   return renderTree;
@@ -60,37 +72,17 @@ window.getRenderTree = (formattedTree) => {
 
 export const List = () => {
   const [tree, setTree] = useState<any[]>(getFormattedTree(rawTree));
-
-  const addChild = (childId, newParentId, oldParentId) => {
-    setTree((prevTree) =>
-      prevTree.map((treeNode) => {
-        if (
-          treeNode.id !== childId &&
-          treeNode.id !== newParentId &&
-          treeNode.id !== oldParentId
-        ) {
-          return treeNode;
-        } else if (treeNode.id === childId) {
-          return { ...treeNode, parentId: newParentId };
-        } else if (treeNode.id === newParentId) {
-          return { ...treeNode, childrenIds: [...childrenIds, childId] };
-        } else if (treeNode.id === oldParentId) {
-          return {
-            ...treeNode,
-            childrenIds: childrenIds.filter((id) => id !== childId),
-          };
-        }
-      })
-    );
-  };
+  const renderTree = getRenderTree(tree);
 
   return (
     <ul>
-      {tree.map((treeNode) => (
-        <li style={{ marginLeft: (treeNode.depth - 1) * 10 }} key={treeNode.id}>
-          {treeNode.title}
-        </li>
-      ))}
+      {renderTree.map((node) => {
+        return (
+          <li style={{ marginLeft: `${node.depth * 15}px` }} key={node.id}>
+            {node.title}
+          </li>
+        );
+      })}
     </ul>
   );
 };
