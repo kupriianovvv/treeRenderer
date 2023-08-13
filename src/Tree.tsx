@@ -102,15 +102,29 @@ export const Tree = () => {
   const [tree, setTree] = useState<TreeFormatted>(getFormattedTree(rawTree));
   const renderTree = getRenderTree(tree);
 
-  return (
-    <ul>
-      {renderTree.map((node) => {
-        return (
-          <li style={{ marginLeft: `${node.depth * 15}px` }} key={node.id}>
-            {node.title}
-          </li>
-        );
-      })}
-    </ul>
+  const rowSizes = new Array(1000)
+    .fill(true)
+    .map(() => 25 + Math.round(Math.random() * 50));
+
+  const getItemSize = (index) => 40;
+
+  const Row = ({ index, style }) => (
+    <div style={{ ...style, marginLeft: `${renderTree[index].depth * 15}px` }}>
+      {renderTree[index].title}
+    </div>
   );
+
+  const Example = () => (
+    <List
+      className="List"
+      height={400}
+      itemCount={renderTree.length}
+      itemSize={getItemSize}
+      width={500}
+    >
+      {Row}
+    </List>
+  );
+
+  return <Example />;
 };
