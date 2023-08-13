@@ -10,7 +10,7 @@ type TreeResponse = TreeResponseNode[];
 type TreeFormattedNode = {
   id: number;
   title: string;
-  children: TreeFormattedNode;
+  children: number[];
 };
 
 type TreeFormatted = {
@@ -22,7 +22,7 @@ type TreeRenderNode = {
   id?: number;
   title?: string;
   children?: number[];
-  depth?: number;
+  depth: number;
 };
 
 type TreeRender = TreeRenderNode[];
@@ -56,7 +56,8 @@ export const List = () => {
     map: Partial<Pick<TreeFormatted, "map">> = {}
   ) => {
     for (const rawTreeNode of rawTree) {
-      const { id, title, children } = rawTreeNode;
+      const { id, title } = rawTreeNode;
+      const children = rawTreeNode.children.map((child) => child.id);
       const formattedTreeNode = {
         id,
         title,
@@ -75,10 +76,14 @@ export const List = () => {
     return { rootIds, map };
   };
 
-  const getRenderSubtree = (renderTree, subtree, depth, formattedTree) => {
-    for (const nodeb of subtree) {
-      const node = tree.map[nodeb.id];
-      node.depth = depth;
+  const getRenderSubtree = (
+    renderTree: TreeRender,
+    childrenIds: number[],
+    depth: number
+  ) => {
+    for (const childId of childrenIds) {
+      const { id, title, children } = tree.map[childId];
+      const node = { id, title, children, depth };
       renderTree.push(node);
       if (node.children.length !== 0) {
         getRenderSubtree(renderTree, node.children, depth + 1);
@@ -92,15 +97,10 @@ export const List = () => {
       const nodeFormatted = formattedTree.map[rootId];
       const { id, title, children } = nodeFormatted;
       const depth = 1;
-      const node = { id, title, children, depth };
-      renderTree.push(node);
-      if (node.children.length !== 0) {
-        getRenderSubtree(
-          renderTree,
-          node.children,
-          node.depth + 1,
-          formattedTree
-        );
+      const renderNode = { id, title, children, depth };
+      renderTree.push(renderNode);
+      if (renderNode.children.length !== 0) {
+        getRenderSubtree(renderTree, renderNode.children, renderNode.depth + 1);
       }
     }
     return renderTree;
