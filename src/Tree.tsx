@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { VariableSizeList as List } from "react-window";
 
 type TreeResponseNode = {
   id: number;
@@ -41,19 +42,12 @@ const rawTree: TreeResponse = [
   },
 ];
 
-const myState = {
-  root: [1, 2, 3],
-  map: {
-    5: { id: 5, title: "z", children: { id: 9 } },
-  },
-};
-
-export const List = () => {
+export const Tree = () => {
   const getFormattedTree = (
     rawTree: TreeResponse,
     rootIds: number[] = [],
     parentId: number | null = null,
-    map: Partial<Pick<TreeFormatted, "map">> = {}
+    map: Record<number, TreeFormattedNode> = {} // Pick<TreeFormatted, "map">
   ) => {
     for (const rawTreeNode of rawTree) {
       const { id, title } = rawTreeNode;

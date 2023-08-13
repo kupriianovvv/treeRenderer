@@ -1,11 +1,12 @@
 import { createRoot } from "react-dom/client";
-import { List } from "./List";
-
+import { Tree } from "./Tree";
 
 const App = () => {
-  return <div>
-    <List />
-  </div>;
+  return (
+    <div>
+      <Tree />
+    </div>
+  );
 };
 
 const container = document.getElementById("root") as HTMLElement;
