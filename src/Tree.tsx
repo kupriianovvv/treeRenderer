@@ -109,7 +109,7 @@ export const Tree = () => {
   const getItemSize = (index) => 40;
 
   const Row = ({ index, style }) => (
-    <div style={{ ...style, marginLeft: `${renderTree[index].depth * 15}px` }}>
+    <div style={{ ...style, paddingLeft: `${renderTree[index].depth * 15}px` }}>
       {renderTree[index].title}
     </div>
   );
