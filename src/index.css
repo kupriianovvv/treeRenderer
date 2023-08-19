@@ -2,10 +2,27 @@
   box-sizing: border-box;
 }
 
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
 span {
   cursor: pointer;
 }
 
 span:hover {
   font-weight: bold;
+}
+
+#root {
+  height: 100%;
+}
+.content {
+  height: 100%;
 }

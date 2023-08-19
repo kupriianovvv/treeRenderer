@@ -3,7 +3,7 @@ import { Tree } from "./Tree";
 
 const App = () => {
   return (
-    <div>
+    <div className="content">
       <Tree />
     </div>
   );

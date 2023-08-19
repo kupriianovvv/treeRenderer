@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FixedSizeList as List } from "react-window";
+import AutoSizer from "react-virtualized-auto-sizer";
 
 type TreeResponseNode = {
   id: number;
@@ -108,22 +109,36 @@ export const Tree = () => {
 
   const getItemSize = (index: number) => 40;
 
-  const Row = ({ index, style}: {index: number, style: Record<string, any>}) => (
+  const Row = ({
+    index,
+    style,
+  }: {
+    index: number;
+    style: Record<string, any>;
+  }) => (
     <div style={{ ...style, paddingLeft: `${renderTree[index].depth * 15}px` }}>
       {renderTree[index].title}
     </div>
   );
 
   const Example = () => (
-    <List
-      className="List"
-      height={400}
-      itemCount={renderTree.length}
-      itemSize={40}
-      width={500}
-    >
-      {Row}
-    </List>
+    <div style={{ height: `100%` }}>
+      <AutoSizer>
+        {({ height, width }) => {
+          return (
+            <List
+              className="List"
+              height={height * 0.8}
+              itemCount={renderTree.length}
+              itemSize={40}
+              width={width * 0.8}
+            >
+              {Row}
+            </List>
+          );
+        }}
+      </AutoSizer>
+    </div>
   );
 
   return <Example />;
