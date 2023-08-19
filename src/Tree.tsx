@@ -106,9 +106,9 @@ export const Tree = () => {
     .fill(true)
     .map(() => 25 + Math.round(Math.random() * 50));
 
-  const getItemSize = (index) => 40;
+  const getItemSize = (index: number) => 40;
 
-  const Row = ({ index, style }) => (
+  const Row = ({ index, style}: {index: number, style: Record<string, any>}) => (
     <div style={{ ...style, paddingLeft: `${renderTree[index].depth * 15}px` }}>
       {renderTree[index].title}
     </div>
