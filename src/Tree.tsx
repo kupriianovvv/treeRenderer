@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { VariableSizeList as List } from "react-window";
+import { FixedSizeList as List } from "react-window";
 
 type TreeResponseNode = {
   id: number;
@@ -119,7 +119,7 @@ export const Tree = () => {
       className="List"
       height={400}
       itemCount={renderTree.length}
-      itemSize={getItemSize}
+      itemSize={40}
       width={500}
     >
       {Row}
