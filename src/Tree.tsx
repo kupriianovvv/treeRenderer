@@ -104,12 +104,6 @@ export const Tree = () => {
   const [tree, setTree] = useState<TreeFormatted>(getFormattedTree(rawTree));
   const renderTree = getRenderTree(tree);
 
-  const rowSizes = new Array(1000)
-    .fill(true)
-    .map(() => 25 + Math.round(Math.random() * 50));
-
-  const getItemSize = (index: number) => 40;
-
   const itemData = {
     renderTree,
     paddings: renderTree.map((node) => `${node.depth * 15}px`),
