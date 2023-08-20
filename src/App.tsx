@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import { Tree } from "./Tree";
+import { Tree } from "./components/Tree";
 
 const App = () => {
   return (

@@ -1,10 +1,7 @@
-import { useState, memo, useMemo } from "react";
-import { FixedSizeList as List, areEqual } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { Row } from "./Row";
+import { useState, useMemo } from "react";
 import { Example } from "./Example";
-import { getFormattedTree } from "./utils/getFormattedTree";
-import { getRenderTree } from "./utils/getRenderTree";
+import { getFormattedTree } from "../utils/getFormattedTree";
+import { getRenderTree } from "../utils/getRenderTree";
 
 export type TreeResponseNode = {
   id: number;

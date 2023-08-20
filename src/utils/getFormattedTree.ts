@@ -1,4 +1,4 @@
-import { TreeFormattedNode, TreeResponse } from "../Tree";
+import { TreeFormattedNode, TreeResponse } from "../components/Tree";
 
 export const getFormattedTree = (
   rawTree: TreeResponse,
