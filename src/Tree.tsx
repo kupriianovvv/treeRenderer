@@ -105,10 +105,13 @@ export const Tree = () => {
   const [tree, setTree] = useState<TreeFormatted>(getFormattedTree(rawTree));
   const renderTree = getRenderTree(tree);
 
-  const itemData = {
-    renderTree,
-    paddings: renderTree.map((node) => `${node.depth * 15}px`),
-  };
+  const itemData = useMemo(
+    () => ({
+      renderTree,
+      paddings: renderTree.map((node) => `${node.depth * 15}px`),
+    }),
+    [tree]
+  );
 
   return <Example itemData={itemData} />;
 };

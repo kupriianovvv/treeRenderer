@@ -6,7 +6,7 @@ export const Row = memo(({ data, index, style }: any) => {
   const item = renderTree[index];
   const padding = paddings[index];
 
-  const styles = useMemo(() => ({ ...style, paddingLeft: padding }), [padding]);
+  const styles = { ...style, paddingLeft: padding };
 
   return <div style={styles}>{item.title}</div>;
 }, areEqual);
