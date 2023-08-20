@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Example } from "./Example";
+import { Rows } from "./Rows";
 import { getFormattedTree } from "../utils/getFormattedTree";
 import { getRenderTree } from "../utils/getRenderTree";
 
@@ -56,5 +56,5 @@ export const Tree = () => {
     [tree]
   );
 
-  return <Example itemData={itemData} />;
+  return <Rows itemData={itemData} />;
 };

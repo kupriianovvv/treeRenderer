@@ -1,8 +1,11 @@
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList as List } from "react-window";
 import { Row } from "./Row";
-
-export const Example = (props: any) => (
+import { TreeRender } from "./Tree";
+type RowsProps = {
+  itemData: { renderTree: TreeRender; paddings: string[] };
+};
+export const Rows = (props: RowsProps) => (
   <div style={{ height: `100%` }}>
     <AutoSizer>
       {({ height, width }) => {
