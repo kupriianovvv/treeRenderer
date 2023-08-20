@@ -3,33 +3,35 @@ import { FixedSizeList as List, areEqual } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { Row } from "./Row";
 import { Example } from "./Example";
+import { getFormattedTree } from "./utils/getFormattedTree";
+import { getRenderTree } from "./utils/getRenderTree";
 
-type TreeResponseNode = {
+export type TreeResponseNode = {
   id: number;
   title: string;
   children: TreeResponseNode[];
 };
-type TreeResponse = TreeResponseNode[];
+export type TreeResponse = TreeResponseNode[];
 
-type TreeFormattedNode = {
+export type TreeFormattedNode = {
   id: number;
   title: string;
   children: number[];
 };
 
-type TreeFormatted = {
+export type TreeFormatted = {
   rootIds: number[];
   map: Record<number, TreeFormattedNode>;
 };
 
-type TreeRenderNode = {
+export type TreeRenderNode = {
   id?: number;
   title?: string;
   children?: number[];
   depth: number;
 };
 
-type TreeRender = TreeRenderNode[];
+export type TreeRender = TreeRenderNode[];
 
 const rawTree: TreeResponse = [
   { id: 1, title: "a", children: [{ id: 4, title: "d", children: [] }] },
@@ -46,52 +48,6 @@ const rawTree: TreeResponse = [
 ];
 
 export const Tree = () => {
-  const getFormattedTree = (
-    rawTree: TreeResponse,
-    rootIds: number[] = [],
-    parentId: number | null = null,
-    map: Record<number, TreeFormattedNode> = {} // Pick<TreeFormatted, "map">
-  ) => {
-    for (const rawTreeNode of rawTree) {
-      const { id, title } = rawTreeNode;
-      const children = rawTreeNode.children.map((child) => child.id);
-      const formattedTreeNode = {
-        id,
-        title,
-        children,
-        parentId,
-      };
-      if (formattedTreeNode.parentId === null) {
-        rootIds.push(formattedTreeNode.id);
-      }
-      map[id] = formattedTreeNode;
-      if (children.length === 0) {
-        continue;
-      }
-      getFormattedTree(rawTreeNode.children, rootIds, id, map);
-    }
-    return { rootIds, map };
-  };
-
-  const getRenderTree = (
-    itemsMap: Record<number, TreeFormattedNode>,
-    itemsIds: number[],
-    renderTree: TreeRender = [],
-    depth = 1
-  ) => {
-    for (const itemId of itemsIds) {
-      const nodeFormatted = itemsMap[itemId];
-      const { id, title, children } = nodeFormatted;
-
-      const renderNode = { id, title, children, depth };
-      renderTree.push(renderNode);
-
-      if (renderNode.children.length !== 0) {
-        getRenderTree(itemsMap, renderNode.children, renderTree, depth + 1);
-      }
-    }
-    return renderTree;
-  };
   const [tree, setTree] = useState<TreeFormatted>(getFormattedTree(rawTree));
   const renderTree = getRenderTree(tree.map, tree.rootIds);
 
