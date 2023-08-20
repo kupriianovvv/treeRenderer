@@ -73,37 +73,27 @@ export const Tree = () => {
     return { rootIds, map };
   };
 
-  const getRenderSubtree = (
-    renderTree: TreeRender,
-    childrenIds: number[],
-    depth: number
+  const getRenderTree = (
+    itemsMap: Record<number, TreeFormattedNode>,
+    itemsIds: number[],
+    renderTree: TreeRender = [],
+    depth = 1
   ) => {
-    for (const childId of childrenIds) {
-      const { id, title, children } = tree.map[childId];
-      const node = { id, title, children, depth };
-      renderTree.push(node);
-      if (node.children.length !== 0) {
-        getRenderSubtree(renderTree, node.children, depth + 1);
-      }
-    }
-  };
-
-  const getRenderTree = (formattedTree: TreeFormatted) => {
-    const renderTree: TreeRender = [];
-    for (const rootId of formattedTree.rootIds) {
-      const nodeFormatted = formattedTree.map[rootId];
+    for (const itemId of itemsIds) {
+      const nodeFormatted = itemsMap[itemId];
       const { id, title, children } = nodeFormatted;
-      const depth = 1;
+
       const renderNode = { id, title, children, depth };
       renderTree.push(renderNode);
+
       if (renderNode.children.length !== 0) {
-        getRenderSubtree(renderTree, renderNode.children, renderNode.depth + 1);
+        getRenderTree(itemsMap, renderNode.children, renderTree, depth + 1);
       }
     }
     return renderTree;
   };
   const [tree, setTree] = useState<TreeFormatted>(getFormattedTree(rawTree));
-  const renderTree = getRenderTree(tree);
+  const renderTree = getRenderTree(tree.map, tree.rootIds);
 
   const itemData = useMemo(
     () => ({
