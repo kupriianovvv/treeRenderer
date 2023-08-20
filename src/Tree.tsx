@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { FixedSizeList as List } from "react-window";
+import { useState, memo, useMemo } from "react";
+import { FixedSizeList as List, areEqual } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
+import { Row } from "./Row";
 
 type TreeResponseNode = {
   id: number;
@@ -109,17 +110,10 @@ export const Tree = () => {
 
   const getItemSize = (index: number) => 40;
 
-  const Row = ({
-    index,
-    style,
-  }: {
-    index: number;
-    style: Record<string, any>;
-  }) => (
-    <div style={{ ...style, paddingLeft: `${renderTree[index].depth * 15}px` }}>
-      {renderTree[index].title}
-    </div>
-  );
+  const itemData = {
+    renderTree,
+    paddings: renderTree.map((node) => `${node.depth * 15}px`),
+  };
 
   const Example = () => (
     <div style={{ height: `100%` }}>
@@ -131,6 +125,7 @@ export const Tree = () => {
               height={height * 0.8}
               itemCount={renderTree.length}
               itemSize={40}
+              itemData={itemData}
               width={width * 0.8}
             >
               {Row}
