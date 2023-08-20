@@ -2,6 +2,7 @@ import { useState, memo, useMemo } from "react";
 import { FixedSizeList as List, areEqual } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { Row } from "./Row";
+import { Example } from "./Example";
 
 type TreeResponseNode = {
   id: number;
@@ -109,26 +110,5 @@ export const Tree = () => {
     paddings: renderTree.map((node) => `${node.depth * 15}px`),
   };
 
-  const Example = () => (
-    <div style={{ height: `100%` }}>
-      <AutoSizer>
-        {({ height, width }) => {
-          return (
-            <List
-              className="List"
-              height={height * 0.8}
-              itemCount={renderTree.length}
-              itemSize={40}
-              itemData={itemData}
-              width={width * 0.8}
-            >
-              {Row}
-            </List>
-          );
-        }}
-      </AutoSizer>
-    </div>
-  );
-
-  return <Example />;
+  return <Example itemData={itemData} />;
 };
