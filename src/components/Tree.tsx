@@ -1,7 +1,9 @@
 import { useState, useMemo } from "react";
-import { Rows } from "./Rows";
 import { getFormattedTree } from "../utils/getFormattedTree";
 import { getRenderTree } from "../utils/getRenderTree";
+import AutoSizer from "react-virtualized-auto-sizer";
+import { FixedSizeList as List } from "react-window";
+import { Row } from "./Row";
 
 export type TreeResponseNode = {
   id: number;
@@ -50,10 +52,27 @@ export const Tree = () => {
 
   const itemData = useMemo(
     () => ({
-      renderTree
+      renderTree,
     }),
     [tree]
   );
 
-  return <Rows itemData={itemData} />;
+  return (
+    <AutoSizer>
+      {({ height, width }) => {
+        return (
+          <List
+            className="List"
+            height={height * 0.8}
+            itemCount={itemData.renderTree.length}
+            itemSize={40}
+            itemData={itemData}
+            width={width * 0.8}
+          >
+            {Row}
+          </List>
+        );
+      }}
+    </AutoSizer>
+  );
 };
