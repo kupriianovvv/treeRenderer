@@ -48,12 +48,8 @@ const rawTree: TreeResponse = [
 
 export const Tree = () => {
   const [tree, setTree] = useState<TreeFormatted>(getFormattedTree(rawTree));
-  const renderTree = getRenderTree(tree.map, tree.rootIds);
-
-  const itemData = useMemo(
-    () => ({
-      renderTree,
-    }),
+  const renderTree = useMemo(
+    () => getRenderTree(tree.map, tree.rootIds),
     [tree]
   );
 
@@ -64,9 +60,9 @@ export const Tree = () => {
           <List
             className="List"
             height={height * 0.8}
-            itemCount={itemData.renderTree.length}
+            itemCount={renderTree.length}
             itemSize={40}
-            itemData={itemData}
+            itemData={renderTree}
             width={width * 0.8}
           >
             {Row}
