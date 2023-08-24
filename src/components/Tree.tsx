@@ -50,8 +50,7 @@ export const Tree = () => {
 
   const itemData = useMemo(
     () => ({
-      renderTree,
-      paddings: renderTree.map((node) => `${node.depth * 15}px`),
+      renderTree
     }),
     [tree]
   );

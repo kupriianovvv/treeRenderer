@@ -3,7 +3,7 @@ import { FixedSizeList as List } from "react-window";
 import { Row } from "./Row";
 import { TreeRender } from "./Tree";
 type RowsProps = {
-  itemData: { renderTree: TreeRender; paddings: string[] };
+  itemData: { renderTree: TreeRender };
 };
 export const Rows = (props: RowsProps) => (
   <div style={{ height: `100%` }}>
