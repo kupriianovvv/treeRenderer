@@ -14,6 +14,7 @@ export const getFormattedTree = (
       title,
       children,
       parentId,
+      isVisible: true,
     };
     if (formattedTreeNode.parentId === null) {
       rootIds.push(formattedTreeNode.id);

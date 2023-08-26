@@ -8,9 +8,9 @@ export const getRenderTree = (
 ) => {
   for (const itemId of itemsIds) {
     const nodeFormatted = itemsMap[itemId];
-    const { id, title, children } = nodeFormatted;
+    const { id, title, children, isVisible } = nodeFormatted;
 
-    const renderNode = { id, title, children, depth };
+    const renderNode = { id, title, children, depth, isVisible };
     renderTree.push(renderNode);
 
     if (renderNode.children.length !== 0) {
