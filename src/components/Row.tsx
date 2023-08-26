@@ -1,9 +1,8 @@
 import { memo, useContext } from "react";
 import { areEqual } from "react-window";
-import { TreeContext } from "./Tree";
 export const Row = memo(({ data: renderData, index, style }: any) => {
-  const { renderTree, onToggleElement } = renderData;
-  const tree = useContext(TreeContext);
+  const { renderTree, onToggleElements } = renderData;
+
   const item = renderTree[index];
 
   const padding = `${item.depth * 10}px`;
@@ -12,7 +11,7 @@ export const Row = memo(({ data: renderData, index, style }: any) => {
   const styles = { ...style, paddingLeft: padding };
 
   const onToggle = () => {
-    onToggleElement(tree, item.id);
+    onToggleElements(item.id);
   };
 
   return (

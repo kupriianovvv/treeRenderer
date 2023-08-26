@@ -1,4 +1,4 @@
-import { useState, useMemo, createContext } from "react";
+import { useState, useMemo } from "react";
 import { getFormattedTree } from "../utils/getFormattedTree";
 import { getRenderTree } from "../utils/getRenderTree";
 import AutoSizer from "react-virtualized-auto-sizer";
@@ -48,11 +48,10 @@ const rawTree: TreeResponse = [
     ],
   },
 ];
-export const TreeContext = createContext<TreeFormatted | null>(null);
 export const Tree = () => {
   const [tree, setTree] = useState<TreeFormatted>(getFormattedTree(rawTree));
 
-  const onToggleElement = (tree: TreeFormatted, id: number) => {
+  const onToggleElements = (id: number) => {
     const subtreeIds = getSubtreeIds(tree, id);
     setTree((prevTree) => {
       const newTree = getToggledSubtree(prevTree, subtreeIds);
@@ -63,30 +62,28 @@ export const Tree = () => {
   const renderData = useMemo(
     () => ({
       renderTree: getRenderTree(tree.map, tree.rootIds),
-      onToggleElement,
+      onToggleElements,
       tree,
     }),
     [tree]
   );
 
   return (
-    <TreeContext.Provider value={tree}>
-      <AutoSizer>
-        {({ height, width }) => {
-          return (
-            <List
-              className="List"
-              height={height * 0.8}
-              itemCount={renderData.renderTree.length}
-              itemSize={40}
-              itemData={renderData}
-              width={width * 0.8}
-            >
-              {Row}
-            </List>
-          );
-        }}
-      </AutoSizer>
-    </TreeContext.Provider>
+    <AutoSizer>
+      {({ height, width }) => {
+        return (
+          <List
+            className="List"
+            height={height * 0.8}
+            itemCount={renderData.renderTree.length}
+            itemSize={40}
+            itemData={renderData}
+            width={width * 0.8}
+          >
+            {Row}
+          </List>
+        );
+      }}
+    </AutoSizer>
   );
 };
