@@ -49,8 +49,48 @@ const rawTree: TreeResponse = [
 
 export const Tree = () => {
   const [tree, setTree] = useState<TreeFormatted>(getFormattedTree(rawTree));
-  const renderTree = useMemo(
-    () => getRenderTree(tree.map, tree.rootIds),
+
+  const getSubtreeIds = (
+    tree: TreeFormatted,
+    parentId: number,
+    subtreeIds: number[] = []
+  ) => {
+    const parentItem = tree.map[parentId];
+
+    for (const childrenId of parentItem.children) {
+      subtreeIds.push(childrenId);
+      getSubtreeIds(tree, childrenId, subtreeIds);
+    }
+    return subtreeIds;
+  };
+
+  const getToggledSubtree = (tree: TreeFormatted, subtreeIds: number[]) => {
+    const newTree = {
+      ...tree,
+      rootIds: [...tree.rootIds],
+      map: { ...tree.map },
+    };
+    for (const id of subtreeIds) {
+      const item = newTree.map[id];
+      item.isVisible = !item.isVisible;
+    }
+    return newTree;
+  };
+
+  const onToggleElement = (tree: TreeFormatted, id: number) => {
+    const subtreeIds = getSubtreeIds(tree, id);
+    setTree((prevTree) => {
+      const newTree = getToggledSubtree(prevTree, subtreeIds);
+      return newTree;
+    });
+  };
+
+  const renderData = useMemo(
+    () => ({
+      renderTree: getRenderTree(tree.map, tree.rootIds),
+      onToggleElement,
+      tree,
+    }),
     [tree]
   );
 
@@ -61,9 +101,9 @@ export const Tree = () => {
           <List
             className="List"
             height={height * 0.8}
-            itemCount={renderTree.length}
+            itemCount={renderData.renderTree.length}
             itemSize={40}
-            itemData={renderTree}
+            itemData={renderData}
             width={width * 0.8}
           >
             {Row}
