@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, createContext } from "react";
 import { getFormattedTree } from "../utils/getFormattedTree";
 import { getRenderTree } from "../utils/getRenderTree";
 import AutoSizer from "react-virtualized-auto-sizer";
@@ -48,7 +48,7 @@ const rawTree: TreeResponse = [
     ],
   },
 ];
-
+export const TreeContext = createContext<TreeFormatted | null>(null);
 export const Tree = () => {
   const [tree, setTree] = useState<TreeFormatted>(getFormattedTree(rawTree));
 
@@ -70,21 +70,23 @@ export const Tree = () => {
   );
 
   return (
-    <AutoSizer>
-      {({ height, width }) => {
-        return (
-          <List
-            className="List"
-            height={height * 0.8}
-            itemCount={renderData.renderTree.length}
-            itemSize={40}
-            itemData={renderData}
-            width={width * 0.8}
-          >
-            {Row}
-          </List>
-        );
-      }}
-    </AutoSizer>
+    <TreeContext.Provider value={tree}>
+      <AutoSizer>
+        {({ height, width }) => {
+          return (
+            <List
+              className="List"
+              height={height * 0.8}
+              itemCount={renderData.renderTree.length}
+              itemSize={40}
+              itemData={renderData}
+              width={width * 0.8}
+            >
+              {Row}
+            </List>
+          );
+        }}
+      </AutoSizer>
+    </TreeContext.Provider>
   );
 };
