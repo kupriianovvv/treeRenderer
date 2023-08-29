@@ -1,4 +1,4 @@
-import { memo, useContext } from "react";
+import { memo } from "react";
 import { areEqual } from "react-window";
 export const Row = memo(({ data: renderData, index, style }: any) => {
   const { renderTree, onToggleElements } = renderData;
@@ -6,7 +6,6 @@ export const Row = memo(({ data: renderData, index, style }: any) => {
   const item = renderTree[index];
 
   const padding = `${item.depth * 10}px`;
-  const isVisible = item.isVisible;
 
   const styles = { ...style, paddingLeft: padding };
 
@@ -15,7 +14,7 @@ export const Row = memo(({ data: renderData, index, style }: any) => {
   };
 
   return (
-    <div hidden={!isVisible} style={styles} onClick={onToggle}>
+    <div style={styles} onClick={onToggle}>
       {item.title}
     </div>
   );
