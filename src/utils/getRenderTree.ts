@@ -13,7 +13,7 @@ export const getRenderTree = (
     const renderNode = { id, title, children, depth, isVisible };
     renderTree.push(renderNode);
 
-    if (renderNode.children.length !== 0) {
+    if (renderNode.children.length !== 0 && renderNode.isVisible) {
       getRenderTree(itemsMap, renderNode.children, renderTree, depth + 1);
     }
   }

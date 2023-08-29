@@ -43,7 +43,17 @@ const rawTree: TreeResponse = [
     title: "c",
     children: [
       { id: 5, title: "z", children: [] },
-      { id: 6, title: "x", children: [{ id: 10, title: "gg", children: [] }] },
+      {
+        id: 6,
+        title: "x",
+        children: [
+          {
+            id: 10,
+            title: "gg",
+            children: [{ id: 11, title: "dd", children: [] }],
+          },
+        ],
+      },
       { id: 7, title: "y", children: [] },
     ],
   },
@@ -52,9 +62,10 @@ export const Tree = () => {
   const [tree, setTree] = useState<TreeFormatted>(getFormattedTree(rawTree));
 
   const onToggleElements = (id: number) => {
-    const subtreeIds = getSubtreeIds(tree, id);
     setTree((prevTree) => {
-      const newTree = getToggledSubtree(prevTree, subtreeIds);
+      const newTree = { ...prevTree, map: { ...prevTree.map } };
+      newTree.map[id].isVisible = !newTree.map[id].isVisible;
+      console.log(newTree);
       return newTree;
     });
   };

@@ -15,7 +15,7 @@ export const Row = memo(({ data: renderData, index, style }: any) => {
   };
 
   return (
-    <div hidden={!isVisible} style={styles} onClick={onToggle}>
+    <div style={styles} onClick={onToggle}>
       {item.title}
     </div>
   );
