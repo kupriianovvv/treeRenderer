@@ -14,6 +14,7 @@ export type TreeFormattedNode = {
   title: string;
   children: number[];
   isVisible: boolean;
+  parentId: number;
 };
 
 export type TreeFormatted = {
@@ -74,10 +75,13 @@ export const Tree = () => {
     [tree]
   );
 
+  console.log(renderData.renderTree);
+
   return renderData.renderTree.map((item) => (
     <div
       style={{ paddingLeft: item.depth * 20, fontSize: "40px" }}
       onClick={() => onToggleElements(item.id)}
+      key={item.id}
     >
       {item.title}
     </div>
