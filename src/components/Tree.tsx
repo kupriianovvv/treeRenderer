@@ -1,9 +1,6 @@
 import { useState, useMemo } from "react";
 import { getFormattedTree } from "../utils/getFormattedTree";
 import { getRenderTree } from "../utils/getRenderTree";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { FixedSizeList as List } from "react-window";
-import { Row } from "./Row";
 
 export type TreeResponseNode = {
   id: number;
@@ -25,7 +22,7 @@ export type TreeFormatted = {
 };
 
 export type TreeRenderNode = {
-  id?: number;
+  id: number;
   title?: string;
   children?: number[];
   depth: number;
@@ -77,22 +74,12 @@ export const Tree = () => {
     [tree]
   );
 
-  return (
-    <AutoSizer>
-      {({ height, width }) => {
-        return (
-          <List
-            className="List"
-            height={height * 0.8}
-            itemCount={renderData.renderTree.length}
-            itemSize={40}
-            itemData={renderData}
-            width={width * 0.8}
-          >
-            {Row}
-          </List>
-        );
-      }}
-    </AutoSizer>
-  );
+  return renderData.renderTree.map((item) => (
+    <div
+      style={{ paddingLeft: item.depth * 20, fontSize: "40px" }}
+      onClick={() => onToggleElements(item.id)}
+    >
+      {item.title}
+    </div>
+  ));
 };
