@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { getFormattedTree } from "../utils/getFormattedTree";
 import { getRenderTree } from "../utils/getRenderTree";
+import { Item } from "./Item";
 
 export type TreeResponseNode = {
   id: number;
@@ -24,8 +25,8 @@ export type TreeFormatted = {
 
 export type TreeRenderNode = {
   id: number;
-  title?: string;
-  children?: number[];
+  title: string;
+  children: number[];
   depth: number;
 };
 
@@ -78,12 +79,11 @@ export const Tree = () => {
   console.log(renderData.renderTree);
 
   return renderData.renderTree.map((item) => (
-    <div
-      style={{ paddingLeft: item.depth * 20, fontSize: "40px" }}
+    <Item
       onClick={() => onToggleElements(item.id)}
       key={item.id}
-    >
-      {item.title}
-    </div>
+      depth={item.depth}
+      title={item.title}
+    />
   ));
 };
