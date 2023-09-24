@@ -9,7 +9,7 @@ type TProps = {
 };
 
 export const Item = (props: TProps) => {
-  const { title, depth, onClick, id, style } = props;
+  const { title, depth = 0, onClick, id, style } = props;
 
   return (
     <div

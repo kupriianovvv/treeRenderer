@@ -24,20 +24,10 @@ export const SortableItem = (props: TProps) => {
     id: id,
   });
 
-  const style = {
-    transform: CSS.Translate.toString(transform),
-  };
-
   return (
     <div ref={setDroppableNodeRef}>
       <div ref={setDraggableNodeRef} {...attributes} {...listeners}>
-        <Item
-          depth={depth}
-          onClick={onClick}
-          title={title}
-          id={id}
-          style={style}
-        ></Item>
+        <Item depth={depth} onClick={onClick} title={title} id={id}></Item>
       </div>
     </div>
   );

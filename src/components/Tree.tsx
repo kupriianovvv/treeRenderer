@@ -4,21 +4,26 @@ import { useTree } from "../hooks/useTree";
 import { SortableItem } from "./SortableItem";
 import {
   DndContext,
+  DragOverlay,
+  DragStartEvent,
   MouseSensor,
   TouchSensor,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
 
+import { useState } from "react";
+
 export const Tree = () => {
   const { renderData, onToggleElements } = useTree(rawTree);
+  const [activeId, setActiveId] = useState<number | null>(null);
 
-  const onDragStart = (e) => {
-    console.log("start");
+  const onDragStart = (e: DragStartEvent) => {
+    setActiveId(+e.active.id);
   };
 
   const onDragEnd = (e) => {
-    console.log("end");
+    setActiveId(null);
   };
 
   const mouseSensor = useSensor(MouseSensor, {
@@ -37,7 +42,11 @@ export const Tree = () => {
   const sensors = useSensors(mouseSensor, touchSensor);
 
   return (
-    <DndContext sensors={sensors}>
+    <DndContext
+      sensors={sensors}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+    >
       {renderData.renderTree.map((item) => (
         <SortableItem
           onClick={() => onToggleElements(item.id)}
@@ -47,6 +56,9 @@ export const Tree = () => {
           id={item.id}
         />
       ))}
+      <DragOverlay dropAnimation={null}>
+        {activeId ? <Item id={activeId} title="tasdsda" /> : null}
+      </DragOverlay>
     </DndContext>
   );
 };
