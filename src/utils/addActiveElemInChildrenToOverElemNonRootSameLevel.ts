@@ -1,4 +1,4 @@
-import { TreeFormatted } from "../components/Tree";
+import { TreeFormatted } from "../hooks/useTree";
 
 export function addActiveElemInChildrenToOverElemNonRootSameLevel(
   treeFormatted: TreeFormatted,
