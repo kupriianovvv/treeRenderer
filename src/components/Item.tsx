@@ -10,6 +10,7 @@ type TProps = {
 
 export const Item = (props: TProps) => {
   const { title, depth, onClick, id, style } = props;
+
   return (
     <div
       style={{ paddingLeft: depth * 20, fontSize: "40px", ...style }}
