@@ -2,11 +2,7 @@ import { createRoot } from "react-dom/client";
 import { Tree } from "./components/Tree";
 
 const App = () => {
-  return (
-    <div className="content">
-      <Tree />
-    </div>
-  );
+  return <Tree />;
 };
 
 const container = document.getElementById("root") as HTMLElement;

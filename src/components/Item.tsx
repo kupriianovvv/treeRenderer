@@ -1,15 +1,20 @@
+import { CSSProperties } from "react";
+
 type TProps = {
   depth: number;
   onClick: (e: React.MouseEvent) => void;
   title: string;
+  id: number;
+  style?: CSSProperties;
 };
 
 export const Item = (props: TProps) => {
-  const { title, depth, onClick } = props;
+  const { title, depth, onClick, id, style } = props;
   return (
     <div
-      style={{ paddingLeft: depth * 20, fontSize: "40px" }}
+      style={{ paddingLeft: depth * 20, fontSize: "40px", ...style }}
       onClick={onClick}
+      id={id.toString()}
     >
       {title}
     </div>
