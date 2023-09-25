@@ -6,6 +6,8 @@ import {
   DndContext,
   DragOverlay,
   DragStartEvent,
+  DragOverEvent,
+  DragEndEvent,
   MouseSensor,
   TouchSensor,
   useSensor,
@@ -15,15 +17,30 @@ import {
 import { useState } from "react";
 
 export const Tree = () => {
-  const { renderData, onToggleElements } = useTree(rawTree);
+  const { renderData, onToggleElements, handleCenterDrag } = useTree(rawTree);
   const [activeId, setActiveId] = useState<number | null>(null);
+  const [overId, setOverId] = useState<number | null>(null);
 
   const onDragStart = (e: DragStartEvent) => {
-    setActiveId(+e.active.id);
+    const { active } = e;
+    setActiveId(+active.id);
   };
 
-  const onDragEnd = (e) => {
+  const onDragOver = (e: DragOverEvent) => {
+    const { over } = e;
+    if (over !== null) {
+      setOverId(+over.id);
+    } else {
+      setOverId(null);
+    }
+  };
+
+  const onDragEnd = (e: DragEndEvent) => {
+    if (activeId !== null && overId !== null) {
+      handleCenterDrag(activeId, overId);
+    }
     setActiveId(null);
+    setOverId(null);
   };
 
   const mouseSensor = useSensor(MouseSensor, {
@@ -45,6 +62,7 @@ export const Tree = () => {
     <DndContext
       sensors={sensors}
       onDragStart={onDragStart}
+      onDragOver={onDragOver}
       onDragEnd={onDragEnd}
     >
       {renderData.renderTree.map((item) => (

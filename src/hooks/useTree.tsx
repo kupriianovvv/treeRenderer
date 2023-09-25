@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { getFormattedTree } from "../utils/getFormattedTree";
 import { getRenderTree } from "../utils/getRenderTree";
+import { addActiveElemInChildrenToOverElemNonRootSameLevel } from "../utils/addActiveElemInChildrenToOverElemNonRootSameLevel";
 
 export type TreeResponseNode = {
   id: number;
@@ -52,5 +53,19 @@ export const useTree = (rawTree: TreeResponse) => {
     [tree]
   );
 
-  return { renderData, onToggleElements };
+  const handleCenterDrag = (activeId: number, overId: number) => {
+    setTree((prevTree) =>
+      addActiveElemInChildrenToOverElemNonRootSameLevel(
+        prevTree,
+        activeId,
+        overId
+      )
+    );
+  };
+
+  return {
+    renderData,
+    onToggleElements,
+    handleCenterDrag,
+  };
 };
