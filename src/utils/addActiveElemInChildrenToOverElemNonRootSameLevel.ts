@@ -6,7 +6,8 @@ export function addActiveElemInChildrenToOverElemNonRootSameLevel(
   overId: number
 ) {
   const activeItem = treeFormatted.map[activeId];
-  const oldParentItem = treeFormatted.map[activeItem.parentId];
+  const oldParentId = activeItem.parentId;
+  const oldParentItem = treeFormatted.map[oldParentId];
   const overItem = treeFormatted.map[overId];
 
   const newTreeFormatted = {
@@ -15,14 +16,23 @@ export function addActiveElemInChildrenToOverElemNonRootSameLevel(
       ...treeFormatted.map,
       [activeId]: { ...activeItem, parentId: overId },
       [overId]: { ...overItem, children: overItem.children.concat(activeId) },
-      [activeItem.parentId]: {
-        ...oldParentItem,
-        children: oldParentItem.children.filter(
-          (childId) => childId !== activeId
-        ),
-      },
     },
   };
+
+  if (oldParentId) {
+    newTreeFormatted.map[oldParentId] = {
+      ...oldParentItem,
+      children: oldParentItem.children.filter(
+        (childId) => childId !== activeId
+      ),
+    };
+  }
+
+  if (newTreeFormatted.rootIds.includes(activeId)) {
+    newTreeFormatted.rootIds = newTreeFormatted.rootIds.filter(
+      (id) => id !== activeId
+    );
+  }
 
   return newTreeFormatted;
 }
