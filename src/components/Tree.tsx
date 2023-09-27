@@ -15,9 +15,16 @@ import {
 } from "@dnd-kit/core";
 
 import { useState } from "react";
+import { useFormattedTree } from "../contexts/FormattedTreeContext";
+import { useDnd } from "../hooks/useDnd";
 
 export const Tree = () => {
-  const { renderData, onToggleElements, handleCenterDrag } = useTree(rawTree);
+  const { tree, setTree } = useFormattedTree();
+  const { renderData, onToggleElements } = useTree({
+    tree,
+    setTree,
+  });
+  const { handleCenterDrag } = useDnd({ tree, setTree });
   const [activeId, setActiveId] = useState<number | null>(null);
   const [overId, setOverId] = useState<number | null>(null);
 

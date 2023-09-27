@@ -3,7 +3,7 @@ import { TreeFormatted, TreeResponse } from "../hooks/useTree";
 import { getFormattedTree } from "../utils/getFormattedTree";
 import { rawTree } from "../utils/const";
 
-type FormattedTreeContext = {
+export type FormattedTreeContext = {
   tree: TreeFormatted;
   setTree: React.Dispatch<React.SetStateAction<TreeFormatted>>;
 };
