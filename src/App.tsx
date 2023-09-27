@@ -1,8 +1,13 @@
 import { createRoot } from "react-dom/client";
 import { Tree } from "./components/Tree";
+import { FormattedTreeContextProvider } from "./contexts/FormattedTreeContext";
 
 const App = () => {
-  return <Tree />;
+  return (
+    <FormattedTreeContextProvider>
+      <Tree />
+    </FormattedTreeContextProvider>
+  );
 };
 
 const container = document.getElementById("root") as HTMLElement;
