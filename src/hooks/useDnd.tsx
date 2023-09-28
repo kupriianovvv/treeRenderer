@@ -3,6 +3,7 @@ import {
   useFormattedTreeContext,
 } from "../contexts/FormattedTreeContext";
 import { addActiveElemInChildrenToOverElemNonRootSameLevel } from "../utils/addActiveElemInChildrenToOverElemNonRootSameLevel";
+import { addLowerNeightbour } from "../utils/addLowerNeighbour";
 import { addUpperNeightbour } from "../utils/addUpperNeightbour";
 
 export const useDnd = () => {
@@ -21,6 +22,10 @@ export const useDnd = () => {
     setTree((prevTree) => addUpperNeightbour(prevTree, activeId, overId));
   };
 
+  const handleLowerDrag = (activeId: number, overId: number) => {
+    setTree((prevTree) => addLowerNeightbour(prevTree, activeId, overId));
+  };
+
   const handleDrag = (
     activeId: number,
     overId: number,
@@ -31,7 +36,7 @@ export const useDnd = () => {
     } else if (position === "center") {
       handleCenterDrag(activeId, overId);
     } else if (position === "lower") {
-      //TODO
+      handleLowerDrag(activeId, overId);
     } else {
       throw new Error("WTF");
     }
