@@ -11,6 +11,15 @@ export const addUpperNeightbour = (
   const overItem = treeFormatted.map[overId];
   const overItemParent = treeFormatted.map[overItem.parentId];
 
+  const index = overItemParent.children.findIndex(
+    (child) => child === overItem.id
+  );
+
+  console.log(index);
+
+  const copy = [...overItemParent.children];
+  copy.splice(index, 0, activeId);
+
   const newTreeFormatted = {
     ...treeFormatted,
     map: {
@@ -22,7 +31,7 @@ export const addUpperNeightbour = (
       },
       [overItemParent.id]: {
         ...overItemParent,
-        children: overItemParent.children.concat(activeId),
+        children: copy,
       },
     },
   };
