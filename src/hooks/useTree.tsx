@@ -2,7 +2,10 @@ import { useMemo, useState } from "react";
 import { getFormattedTree } from "../utils/getFormattedTree";
 import { getRenderTree } from "../utils/getRenderTree";
 import { addActiveElemInChildrenToOverElemNonRootSameLevel } from "../utils/addActiveElemInChildrenToOverElemNonRootSameLevel";
-import { FormattedTreeContext } from "../contexts/FormattedTreeContext";
+import {
+  FormattedTreeContext,
+  useFormattedTree,
+} from "../contexts/FormattedTreeContext";
 
 export type TreeResponseNode = {
   id: number;
@@ -33,7 +36,8 @@ export type TreeRenderNode = {
 
 export type TreeRender = TreeRenderNode[];
 
-export const useTree = ({ tree, setTree }: FormattedTreeContext) => {
+export const useTree = () => {
+  const { tree, setTree } = useFormattedTree();
   const onToggleElements = (id: number) => {
     setTree((prevTree) => {
       const newTree = { ...prevTree, map: { ...prevTree.map } };

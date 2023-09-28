@@ -19,12 +19,8 @@ import { useFormattedTree } from "../contexts/FormattedTreeContext";
 import { useDnd } from "../hooks/useDnd";
 
 export const Tree = () => {
-  const { tree, setTree } = useFormattedTree();
-  const { renderData, onToggleElements } = useTree({
-    tree,
-    setTree,
-  });
-  const { handleCenterDrag } = useDnd({ tree, setTree });
+  const { renderData, onToggleElements } = useTree();
+  const { handleCenterDrag } = useDnd();
   const [activeId, setActiveId] = useState<number | null>(null);
   const [overId, setOverId] = useState<number | null>(null);
 
