@@ -20,7 +20,7 @@ import { useDnd } from "../hooks/useDnd";
 
 export const Tree = () => {
   const { renderData, onToggleElements } = useTree();
-  const { handleCenterDrag } = useDnd();
+  const { handleDrag } = useDnd();
   const [activeId, setActiveId] = useState<number | null>(null);
   const [overId, setOverId] = useState<number | null>(null);
   const [position, setPosition] = useState<"upper" | "center" | "lower" | null>(
@@ -41,12 +41,13 @@ export const Tree = () => {
       setPosition(position);
     } else {
       setOverId(null);
+      setPosition(null);
     }
   };
 
   const onDragEnd = (e: DragEndEvent) => {
-    if (activeId !== null && overId !== null) {
-      handleCenterDrag(activeId, overId);
+    if (activeId !== null && overId !== null && position !== null) {
+      handleDrag(activeId, overId, position);
     }
     setActiveId(null);
     setOverId(null);
