@@ -11,8 +11,15 @@ type TProps = {
 
 export const SortableItem = (props: TProps) => {
   const { title, depth, onClick, id } = props;
-  const { setNodeRef: setDroppableNodeRef } = useDroppable({
-    id: id,
+
+  const { setNodeRef: setCenterDroppableNodeRef } = useDroppable({
+    id: `${id}-center`,
+  });
+  const { setNodeRef: setUpperDroppableNodeRef } = useDroppable({
+    id: `${id}-upper`,
+  });
+  const { setNodeRef: setLowerDroppableNodeRef } = useDroppable({
+    id: `${id}-lower`,
   });
 
   const {
@@ -25,10 +32,17 @@ export const SortableItem = (props: TProps) => {
   });
 
   return (
-    <div ref={setDroppableNodeRef}>
-      <div ref={setDraggableNodeRef} {...attributes} {...listeners}>
+    <div
+      ref={setDraggableNodeRef}
+      {...attributes}
+      {...listeners}
+      style={{ width: "300px", height: "80px" }}
+    >
+      <div ref={setUpperDroppableNodeRef} style={{ height: "25%" }}></div>
+      <div ref={setCenterDroppableNodeRef} style={{ height: "50%" }}>
         <Item depth={depth} onClick={onClick} title={title} id={id}></Item>
       </div>
+      <div ref={setLowerDroppableNodeRef} style={{ height: "25%" }}></div>
     </div>
   );
 };

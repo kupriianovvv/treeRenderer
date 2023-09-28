@@ -23,6 +23,9 @@ export const Tree = () => {
   const { handleCenterDrag } = useDnd();
   const [activeId, setActiveId] = useState<number | null>(null);
   const [overId, setOverId] = useState<number | null>(null);
+  const [position, setPosition] = useState<"upper" | "center" | "lower" | null>(
+    null
+  );
 
   const onDragStart = (e: DragStartEvent) => {
     const { active } = e;
@@ -31,8 +34,11 @@ export const Tree = () => {
 
   const onDragOver = (e: DragOverEvent) => {
     const { over } = e;
+    console.log(over);
     if (over !== null) {
-      setOverId(+over.id);
+      const [id, position] = over.id.split("-");
+      setOverId(+id);
+      setPosition(position);
     } else {
       setOverId(null);
     }
@@ -44,6 +50,7 @@ export const Tree = () => {
     }
     setActiveId(null);
     setOverId(null);
+    setPosition(null);
   };
 
   const mouseSensor = useSensor(MouseSensor, {
