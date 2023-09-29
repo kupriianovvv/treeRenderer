@@ -3,10 +3,11 @@ import { TreeFormatted, TreeResponse } from "../hooks/useTree";
 import { getFormattedTree } from "../utils/getFormattedTree";
 import { rawTree } from "../utils/const";
 import { useImmer } from "use-immer";
+import { Updater } from "use-immer";
 
 export type FormattedTreeContext = {
   tree: TreeFormatted;
-  setTree: React.Dispatch<React.SetStateAction<TreeFormatted>>;
+  setTree: Updater<TreeFormatted>;
 };
 
 export const useFormattedTreeContext = (rawTree: TreeResponse) => {
