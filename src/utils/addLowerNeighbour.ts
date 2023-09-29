@@ -17,5 +17,7 @@ export const addLowerNeightbour = (
   const overItemIndex = overItemParent.children.findIndex(
     (childId) => childId === overId
   );
+
+  activeItem.parentId = overItemParent.id;
   overItemParent.children.splice(overItemIndex + 1, 0, activeId);
 };

@@ -1,10 +1,4 @@
 import { TreeFormatted } from "../hooks/useTree";
-// найти activeItem
-// найти overItem
-// найти parent активного элемента
-// удалить из его чилдренов активный элемент
-// указываем в parentId активного элемента overId
-// в overItem в чилдрены добавляем активный элементы
 export function addActiveElemInChildrenToOverElemNonRootSameLevel(
   treeFormatted: TreeFormatted,
   activeId: number,
