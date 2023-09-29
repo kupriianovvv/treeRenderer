@@ -1,40 +1,21 @@
 import { TreeFormatted } from "../hooks/useTree";
-
 export const addUpperNeightbour = (
   treeFormatted: TreeFormatted,
   activeId: number,
   overId: number
 ) => {
   const activeItem = treeFormatted.map[activeId];
-  const oldParentId = activeItem.parentId;
-  const oldParentItem = treeFormatted.map[oldParentId];
   const overItem = treeFormatted.map[overId];
+
+  const activeItemParent = treeFormatted.map[activeItem.parentId];
   const overItemParent = treeFormatted.map[overItem.parentId];
 
-  const index = overItemParent.children.findIndex(
-    (child) => child === overItem.id
+  activeItemParent.children = activeItemParent.children.filter(
+    (childId) => childId !== activeId
   );
 
-  console.log(index);
-
-  const copy = [...overItemParent.children];
-  copy.splice(index, 0, activeId);
-
-  const newTreeFormatted = {
-    ...treeFormatted,
-    map: {
-      ...treeFormatted.map,
-      [activeId]: { ...activeItem, parentId: overItem.parentId },
-      [oldParentId]: {
-        ...oldParentItem,
-        children: oldParentItem.children.filter((child) => child !== activeId),
-      },
-      [overItemParent.id]: {
-        ...overItemParent,
-        children: copy,
-      },
-    },
-  };
-
-  return newTreeFormatted;
+  const overItemIndex = overItemParent.children.findIndex(
+    (childId) => childId === overId
+  );
+  overItemParent.children.splice(overItemIndex, 0, activeId);
 };

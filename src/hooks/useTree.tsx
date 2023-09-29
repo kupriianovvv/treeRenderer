@@ -42,8 +42,6 @@ export const useTree = () => {
     setTree((prevTree) => {
       const newTree = { ...prevTree, map: { ...prevTree.map } };
       newTree.map[id].isVisible = !newTree.map[id].isVisible;
-      console.log(newTree);
-      return newTree;
     });
   };
 

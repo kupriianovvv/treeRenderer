@@ -1,38 +1,23 @@
 import { TreeFormatted } from "../hooks/useTree";
-
+// найти activeItem
+// найти overItem
+// найти parent активного элемента
+// удалить из его чилдренов активный элемент
+// указываем в parentId активного элемента overId
+// в overItem в чилдрены добавляем активный элементы
 export function addActiveElemInChildrenToOverElemNonRootSameLevel(
   treeFormatted: TreeFormatted,
   activeId: number,
   overId: number
 ) {
   const activeItem = treeFormatted.map[activeId];
-  const oldParentId = activeItem.parentId;
-  const oldParentItem = treeFormatted.map[oldParentId];
   const overItem = treeFormatted.map[overId];
 
-  const newTreeFormatted = {
-    ...treeFormatted,
-    map: {
-      ...treeFormatted.map,
-      [activeId]: { ...activeItem, parentId: overId },
-      [overId]: { ...overItem, children: overItem.children.concat(activeId) },
-    },
-  };
+  const activeItemParent = treeFormatted.map[activeItem.parentId];
+  activeItemParent.children = activeItemParent.children.filter(
+    (childId) => childId !== activeId
+  );
 
-  if (oldParentId) {
-    newTreeFormatted.map[oldParentId] = {
-      ...oldParentItem,
-      children: oldParentItem.children.filter(
-        (childId) => childId !== activeId
-      ),
-    };
-  }
-
-  if (newTreeFormatted.rootIds.includes(activeId)) {
-    newTreeFormatted.rootIds = newTreeFormatted.rootIds.filter(
-      (id) => id !== activeId
-    );
-  }
-
-  return newTreeFormatted;
+  overItem.children.push(activeId);
+  activeItem.parentId = overId;
 }

@@ -2,6 +2,7 @@ import { createContext, useContext, useState, ReactNode } from "react";
 import { TreeFormatted, TreeResponse } from "../hooks/useTree";
 import { getFormattedTree } from "../utils/getFormattedTree";
 import { rawTree } from "../utils/const";
+import { useImmer } from "use-immer";
 
 export type FormattedTreeContext = {
   tree: TreeFormatted;
@@ -9,7 +10,7 @@ export type FormattedTreeContext = {
 };
 
 export const useFormattedTreeContext = (rawTree: TreeResponse) => {
-  const [tree, setTree] = useState<TreeFormatted>(getFormattedTree(rawTree));
+  const [tree, setTree] = useImmer<TreeFormatted>(getFormattedTree(rawTree));
 
   return { tree, setTree };
 };
