@@ -36,7 +36,10 @@ export const Tree = () => {
     const { over } = e;
     console.log(over);
     if (over !== null) {
-      const [id, position] = over.id.split("-");
+      const [id, position] = over.id.toString().split("-") as [
+        string,
+        "upper" | "center" | "lower"
+      ];
       setOverId(+id);
       setPosition(position);
     } else {
