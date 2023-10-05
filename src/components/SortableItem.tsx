@@ -12,15 +12,18 @@ type TProps = {
 export const SortableItem = (props: TProps) => {
   const { title, depth, onClick, id } = props;
 
-  const { setNodeRef: setCenterDroppableNodeRef } = useDroppable({
-    id: `${id}-center`,
-  });
-  const { setNodeRef: setUpperDroppableNodeRef } = useDroppable({
-    id: `${id}-upper`,
-  });
-  const { setNodeRef: setLowerDroppableNodeRef } = useDroppable({
-    id: `${id}-lower`,
-  });
+  const { setNodeRef: setCenterDroppableNodeRef, isOver: isOverCenter } =
+    useDroppable({
+      id: `${id}-center`,
+    });
+  const { setNodeRef: setUpperDroppableNodeRef, isOver: isOverUpper } =
+    useDroppable({
+      id: `${id}-upper`,
+    });
+  const { setNodeRef: setLowerDroppableNodeRef, isOver: isOverLower } =
+    useDroppable({
+      id: `${id}-lower`,
+    });
 
   const {
     attributes,
@@ -38,11 +41,20 @@ export const SortableItem = (props: TProps) => {
       {...listeners}
       style={{ width: "300px", height: "80px" }}
     >
-      <div ref={setUpperDroppableNodeRef} style={{ height: "25%" }}></div>
-      <div ref={setCenterDroppableNodeRef} style={{ height: "50%" }}>
+      <div
+        ref={setUpperDroppableNodeRef}
+        style={{ height: "25%", background: isOverUpper ? "blue" : "" }}
+      ></div>
+      <div
+        ref={setCenterDroppableNodeRef}
+        style={{ height: "50%", background: isOverCenter ? "red" : "" }}
+      >
         <Item depth={depth} onClick={onClick} title={title} id={id}></Item>
       </div>
-      <div ref={setLowerDroppableNodeRef} style={{ height: "25%" }}></div>
+      <div
+        ref={setLowerDroppableNodeRef}
+        style={{ height: "25%", background: isOverLower ? "green" : "" }}
+      ></div>
     </div>
   );
 };
