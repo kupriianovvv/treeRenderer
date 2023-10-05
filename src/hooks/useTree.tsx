@@ -47,7 +47,7 @@ export const useTree = () => {
 
   const renderData = useMemo(
     () => ({
-      renderTree: getRenderTree(tree.map, tree.rootIds),
+      renderTree: getRenderTree(tree.map, tree.map[-1000].children),
       onToggleElements,
       tree,
     }),
