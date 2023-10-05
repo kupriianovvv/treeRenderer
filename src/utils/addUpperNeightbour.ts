@@ -23,4 +23,6 @@ export const addUpperNeightbour = (
 
   activeItem.parentId = overItemParent.id;
   overItemParent.children.splice(overItemIndex, 0, activeId);
+
+  activeItem.isVisible = false;
 };

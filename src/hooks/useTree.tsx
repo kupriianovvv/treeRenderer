@@ -40,8 +40,7 @@ export const useTree = () => {
   const { tree, setTree } = useFormattedTree();
   const onToggleElements = (id: number) => {
     setTree((prevTree) => {
-      const newTree = { ...prevTree, map: { ...prevTree.map } };
-      newTree.map[id].isVisible = !newTree.map[id].isVisible;
+      prevTree.map[id].isVisible = !prevTree.map[id].isVisible;
     });
   };
 

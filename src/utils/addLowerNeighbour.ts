@@ -1,4 +1,4 @@
-import { TreeFormatted } from "../hooks/useTree";
+import { TreeFormatted, useTree } from "../hooks/useTree";
 export const addLowerNeightbour = (
   treeFormatted: TreeFormatted,
   activeId: number,
@@ -24,4 +24,6 @@ export const addLowerNeightbour = (
 
   activeItem.parentId = overItemParent.id;
   overItemParent.children.splice(overItemIndex + 1, 0, activeId);
+
+  activeItem.isVisible = false;
 };
