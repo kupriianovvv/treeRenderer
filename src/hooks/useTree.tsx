@@ -19,7 +19,7 @@ export type TreeFormattedNode = {
   title: string;
   children: number[];
   isVisible: boolean;
-  parentId: number;
+  parentId: number | null | undefined;
 };
 
 export type TreeFormatted = {

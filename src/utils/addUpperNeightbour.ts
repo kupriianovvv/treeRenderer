@@ -4,6 +4,9 @@ export const addUpperNeightbour = (
   activeId: number,
   overId: number
 ) => {
+  if (activeId === overId) {
+    return;
+  }
   const activeItem = treeFormatted.map[activeId];
   const overItem = treeFormatted.map[overId];
 
