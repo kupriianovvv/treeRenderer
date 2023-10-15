@@ -1,4 +1,4 @@
-import { TreeFormatted } from "../hooks/useTree";
+import { TreeFormatted } from "../store";
 export const addUpperNeightbour = (
   treeFormatted: TreeFormatted,
   activeId: number,
