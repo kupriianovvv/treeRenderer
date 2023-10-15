@@ -10,7 +10,7 @@ export const getFormattedTree = (
       title: "root",
       children: [],
       parentId: null,
-      isVisible: true,
+      isExpanded: true,
     },
   }
 ) => {
@@ -22,7 +22,7 @@ export const getFormattedTree = (
       title,
       children,
       parentId,
-      isVisible: true,
+      isExpanded: true,
     };
     if (formattedTreeNode.parentId === null) {
       rootIds.push(formattedTreeNode.id);

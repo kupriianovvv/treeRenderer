@@ -8,12 +8,12 @@ export const getRenderTree = (
 ) => {
   for (const itemId of itemsIds) {
     const nodeFormatted = itemsMap[itemId];
-    const { id, title, children, isVisible } = nodeFormatted;
+    const { id, title, children, isExpanded } = nodeFormatted;
 
-    const renderNode = { id, title, children, depth, isVisible };
+    const renderNode = { id, title, children, depth, isExpanded };
     renderTree.push(renderNode);
 
-    if (renderNode.children.length !== 0 && renderNode.isVisible) {
+    if (renderNode.children.length !== 0 && renderNode.isExpanded) {
       getRenderTree(itemsMap, renderNode.children, renderTree, depth + 1);
     }
   }

@@ -6,21 +6,46 @@ import { addUpperNeightbour } from "./utils/addUpperNeightbour";
 import { addLowerNeightbour } from "./utils/addLowerNeighbour";
 import { addActiveElemInChildrenToOverElemNonRootSameLevel } from "./utils/addActiveElemInChildrenToOverElemNonRootSameLevel";
 
-const useTreeStore = create(
+type TreeFormattedNode = {
+  id: number;
+  title: string;
+  children: number[];
+  isExpanded: boolean;
+  parentId: number;
+};
+
+type TreeFormatted = {
+  rootIds: number[];
+  map: Record<number, TreeFormattedNode>;
+};
+
+type Actions = {
+  onToggleElement: (id: number) => void;
+  handleUpperDrag: (activeId: number, overId: number) => void;
+  handleCenterDrag: (activeId: number, overId: number) => void;
+  handleLowerDrag: (activeId: number, overId: number) => void;
+  handleDrag: (
+    activeId: number,
+    overId: number,
+    position: "upper" | "center" | "lower"
+  ) => void;
+};
+
+const useTreeStore = create<{ tree: TreeFormatted } & Actions>()(
   immer((set, get) => ({
     tree: getFormattedTree(rawTree),
     log: () => {
       console.log(get());
     },
-    onToggleElement: (id) =>
+    onToggleElement: (id: number) =>
       set((state) => {
-        state.tree.map[id].isVisible = !state.tree.map[id].isVisible;
+        state.tree.map[id].isExpanded = !state.tree.map[id].isExpanded;
       }),
-    handleUpperDrag: (activeId, overId) =>
+    handleUpperDrag: (activeId: number, overId: number) =>
       set((state) => {
         addUpperNeightbour(state.tree, activeId, overId);
       }),
-    handleCenterDrag: (activeId, overId) =>
+    handleCenterDrag: (activeId: number, overId: number) =>
       set((state) =>
         addActiveElemInChildrenToOverElemNonRootSameLevel(
           state.tree,
@@ -28,11 +53,15 @@ const useTreeStore = create(
           overId
         )
       ),
-    handleLowerDrag: (activeId, overId) =>
+    handleLowerDrag: (activeId: number, overId: number) =>
       set((state) => {
         addLowerNeightbour(state.tree, activeId, overId);
       }),
-    handleDrag: (activeId, overId, position) => {
+    handleDrag: (
+      activeId: number,
+      overId: number,
+      position: "upper" | "center" | "lower"
+    ) => {
       if (position === "upper") {
         get().handleUpperDrag(activeId, overId);
       } else if (position === "center") {

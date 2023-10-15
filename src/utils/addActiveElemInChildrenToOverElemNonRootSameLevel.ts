@@ -17,6 +17,4 @@ export function addActiveElemInChildrenToOverElemNonRootSameLevel(
 
   overItem.children.push(activeId);
   activeItem.parentId = overId;
-
-  activeItem.isVisible = false;
 }

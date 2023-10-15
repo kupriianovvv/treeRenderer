@@ -24,6 +24,4 @@ export const addLowerNeightbour = (
 
   activeItem.parentId = overItemParent.id;
   overItemParent.children.splice(overItemIndex + 1, 0, activeId);
-
-  activeItem.isVisible = false;
 };

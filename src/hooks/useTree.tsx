@@ -18,7 +18,7 @@ export type TreeFormattedNode = {
   id: number;
   title: string;
   children: number[];
-  isVisible: boolean;
+  isExpanded: boolean;
   parentId: number;
 };
 
