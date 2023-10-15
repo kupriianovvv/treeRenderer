@@ -1,8 +1,8 @@
 import { CSSProperties } from "react";
 
 type TProps = {
-  depth: number;
-  onClick: (e: React.MouseEvent) => void;
+  depth?: number;
+  onClick?: (e: React.MouseEvent) => void;
   title: string;
   id: number;
   style?: CSSProperties;

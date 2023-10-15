@@ -6,7 +6,7 @@ import { addUpperNeightbour } from "./utils/addUpperNeightbour";
 import { addLowerNeightbour } from "./utils/addLowerNeighbour";
 import { addActiveElemInChildrenToOverElemNonRootSameLevel } from "./utils/addActiveElemInChildrenToOverElemNonRootSameLevel";
 
-type TreeFormattedNode = {
+export type TreeFormattedNode = {
   id: number;
   title: string;
   children: number[];
@@ -14,7 +14,7 @@ type TreeFormattedNode = {
   parentId: number;
 };
 
-type TreeFormatted = {
+export type TreeFormatted = {
   rootIds: number[];
   map: Record<number, TreeFormattedNode>;
 };

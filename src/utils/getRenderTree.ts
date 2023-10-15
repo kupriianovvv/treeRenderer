@@ -1,4 +1,13 @@
-import { TreeFormattedNode, TreeRender } from "../hooks/useTree";
+import { TreeFormattedNode } from "./../store";
+
+type TreeRenderNode = {
+  id: number;
+  title: string;
+  children: number[];
+  depth: number;
+};
+
+type TreeRender = TreeRenderNode[];
 
 export const getRenderTree = (
   itemsMap: Record<number, TreeFormattedNode>,

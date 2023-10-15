@@ -1,6 +1,5 @@
 import { Item } from "./Item";
 import { rawTree } from "../utils/const";
-import { useTree } from "../hooks/useTree";
 import { SortableItem } from "./SortableItem";
 import {
   DndContext,
@@ -15,8 +14,6 @@ import {
 } from "@dnd-kit/core";
 
 import { useState } from "react";
-import { useFormattedTree } from "../contexts/FormattedTreeContext";
-import { useDnd } from "../hooks/useDnd";
 import { useTreeStore } from "../store";
 import { getRenderTree } from "../utils/getRenderTree";
 
