@@ -2,9 +2,9 @@ import { create } from "zustand";
 import { getFormattedTree } from "./utils/getFormattedTree";
 import { rawTree } from "./utils/const";
 import { immer } from "zustand/middleware/immer";
-import { addUpperNeightbour } from "./utils/addUpperNeightbour";
-import { addLowerNeightbour } from "./utils/addLowerNeighbour";
-import { addActiveElemInChildrenToOverElemNonRootSameLevel } from "./utils/addActiveElemInChildrenToOverElemNonRootSameLevel";
+import { addUpperNeighbor } from "./utils/addUpperNeighbor";
+import { addLowerNeighbor } from "./utils/addLowerNeighbor";
+import { addMiddleNeighbor } from "./utils/addMiddleNeighbor";
 
 export type TreeFormattedNode = {
   id: number;
@@ -43,19 +43,13 @@ const useTreeStore = create<{ tree: TreeFormatted } & Actions>()(
       }),
     handleUpperDrag: (activeId: number, overId: number) =>
       set((state) => {
-        addUpperNeightbour(state.tree, activeId, overId);
+        addUpperNeighbor(state.tree, activeId, overId);
       }),
     handleCenterDrag: (activeId: number, overId: number) =>
-      set((state) =>
-        addActiveElemInChildrenToOverElemNonRootSameLevel(
-          state.tree,
-          activeId,
-          overId
-        )
-      ),
+      set((state) => addMiddleNeighbor(state.tree, activeId, overId)),
     handleLowerDrag: (activeId: number, overId: number) =>
       set((state) => {
-        addLowerNeightbour(state.tree, activeId, overId);
+        addLowerNeighbor(state.tree, activeId, overId);
       }),
     handleDrag: (
       activeId: number,

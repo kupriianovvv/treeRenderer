@@ -1,20 +1,27 @@
 import { TreeFormatted } from "../store";
-export function addActiveElemInChildrenToOverElemNonRootSameLevel(
+export const addLowerNeighbor = (
   treeFormatted: TreeFormatted,
   activeId: number,
   overId: number
-) {
+) => {
   if (activeId === overId) {
     return;
   }
+
   const activeItem = treeFormatted.map[activeId];
   const overItem = treeFormatted.map[overId];
 
   const activeItemParent = treeFormatted.map[activeItem.parentId];
+  const overItemParent = treeFormatted.map[overItem.parentId];
+
   activeItemParent.children = activeItemParent.children.filter(
     (childId) => childId !== activeId
   );
 
-  overItem.children.push(activeId);
-  activeItem.parentId = overId;
-}
+  const overItemIndex = overItemParent.children.findIndex(
+    (childId) => childId === overId
+  );
+
+  activeItem.parentId = overItemParent.id;
+  overItemParent.children.splice(overItemIndex + 1, 0, activeId);
+};

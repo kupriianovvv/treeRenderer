@@ -1,5 +1,5 @@
 import { TreeFormatted } from "../store";
-export const addUpperNeightbour = (
+export const addUpperNeighbor = (
   treeFormatted: TreeFormatted,
   activeId: number,
   overId: number
