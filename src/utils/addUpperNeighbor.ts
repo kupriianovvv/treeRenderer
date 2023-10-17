@@ -13,6 +13,14 @@ export const addUpperNeighbor = (
   const activeItemParent = treeFormatted.map[activeItem.parentId];
   const overItemParent = treeFormatted.map[overItem.parentId];
 
+  let dummyItem = overItemParent;
+  while (dummyItem) {
+    if (dummyItem.id === activeId) {
+      return;
+    }
+    dummyItem = treeFormatted.map[dummyItem.parentId];
+  }
+
   activeItemParent.children = activeItemParent.children.filter(
     (childId) => childId !== activeId
   );
