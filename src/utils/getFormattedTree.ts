@@ -1,16 +1,33 @@
-import { TreeFormattedNode, TreeResponse } from "../hooks/useTree";
+import { TreeFormattedNode } from "./../store";
+type TreeRenderNode = {
+  id: number;
+  title: string;
+  children: number[];
+  depth: number;
+};
+
+type TreeRender = TreeRenderNode[];
+
+export type TreeResponseNode = {
+  id: number;
+  title: string;
+  children: TreeResponseNode[];
+};
+export type TreeResponse = TreeResponseNode[];
 
 export const getFormattedTree = (
   rawTree: TreeResponse,
   rootIds: number[] = [],
-  parentId: number | null = null,
+  //@ts-ignore
+  parentId: number = null,
   map: Record<number, TreeFormattedNode> = {
     [-1000]: {
       id: -1000,
       title: "root",
       children: [],
+      //@ts-ignore
       parentId: null,
-      isVisible: true,
+      isExpanded: true,
     },
   }
 ) => {
@@ -22,7 +39,7 @@ export const getFormattedTree = (
       title,
       children,
       parentId,
-      isVisible: true,
+      isExpanded: true,
     };
     if (formattedTreeNode.parentId === null) {
       rootIds.push(formattedTreeNode.id);

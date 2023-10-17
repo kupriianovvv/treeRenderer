@@ -1,5 +1,5 @@
-import { TreeFormatted } from "../hooks/useTree";
-export const addUpperNeightbour = (
+import { TreeFormatted } from "../store";
+export const addLowerNeighbor = (
   treeFormatted: TreeFormatted,
   activeId: number,
   overId: number
@@ -7,6 +7,7 @@ export const addUpperNeightbour = (
   if (activeId === overId) {
     return;
   }
+
   const activeItem = treeFormatted.map[activeId];
   const overItem = treeFormatted.map[overId];
 
@@ -22,7 +23,5 @@ export const addUpperNeightbour = (
   );
 
   activeItem.parentId = overItemParent.id;
-  overItemParent.children.splice(overItemIndex, 0, activeId);
-
-  activeItem.isVisible = false;
+  overItemParent.children.splice(overItemIndex + 1, 0, activeId);
 };

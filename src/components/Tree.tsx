@@ -1,6 +1,5 @@
 import { Item } from "./Item";
 import { rawTree } from "../utils/const";
-import { useTree } from "../hooks/useTree";
 import { SortableItem } from "./SortableItem";
 import {
   DndContext,
@@ -15,12 +14,15 @@ import {
 } from "@dnd-kit/core";
 
 import { useState } from "react";
-import { useFormattedTree } from "../contexts/FormattedTreeContext";
-import { useDnd } from "../hooks/useDnd";
+import { useTreeStore } from "../store";
+import { getRenderTree } from "../utils/getRenderTree";
 
 export const Tree = () => {
-  const { renderData, onToggleElements } = useTree();
-  const { handleDrag } = useDnd();
+  const tree = useTreeStore((store) => store.tree);
+  const onToggleElement = useTreeStore((store) => store.onToggleElement);
+  const handleDrag = useTreeStore((store) => store.handleDrag);
+  const renderTree = getRenderTree(tree.map, tree.map[-1000].children);
+  //const { handleDrag } = useDnd();
   const [activeId, setActiveId] = useState<number | null>(null);
   const [overId, setOverId] = useState<number | null>(null);
   const [position, setPosition] = useState<"upper" | "center" | "lower" | null>(
@@ -65,8 +67,7 @@ export const Tree = () => {
   });
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: {
-      delay: 250,
-      tolerance: 5,
+      distance: 10,
     },
   });
 
@@ -79,9 +80,9 @@ export const Tree = () => {
       onDragOver={onDragOver}
       onDragEnd={onDragEnd}
     >
-      {renderData.renderTree.map((item) => (
+      {renderTree.map((item) => (
         <SortableItem
-          onClick={() => onToggleElements(item.id)}
+          onClick={() => onToggleElement(item.id)}
           key={item.id}
           depth={item.depth}
           title={item.title}

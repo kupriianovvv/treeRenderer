@@ -7,6 +7,7 @@ type TProps = {
   onClick: (e: React.MouseEvent) => void;
   title: string;
   id: number;
+  overId: number | null;
 };
 
 export const SortableItem = (props: TProps) => {

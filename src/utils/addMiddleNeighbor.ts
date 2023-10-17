@@ -1,5 +1,5 @@
-import { TreeFormatted } from "../hooks/useTree";
-export function addActiveElemInChildrenToOverElemNonRootSameLevel(
+import { TreeFormatted } from "../store";
+export function addMiddleNeighbor(
   treeFormatted: TreeFormatted,
   activeId: number,
   overId: number
@@ -17,6 +17,4 @@ export function addActiveElemInChildrenToOverElemNonRootSameLevel(
 
   overItem.children.push(activeId);
   activeItem.parentId = overId;
-
-  activeItem.isVisible = false;
 }
