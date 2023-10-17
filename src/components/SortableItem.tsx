@@ -1,6 +1,7 @@
 import { useDroppable, useDraggable } from "@dnd-kit/core";
 import { Item } from "./Item";
 import { CSS } from "@dnd-kit/utilities";
+import { TreeFormatted, useTreeStore } from "../store";
 
 type TProps = {
   depth: number;
@@ -10,8 +11,29 @@ type TProps = {
   overId: number | null;
 };
 
+function isDroppableNeeded(
+  treeFormatted: TreeFormatted,
+  activeId: number,
+  overId: number
+) {
+  if (activeId === overId) {
+    return false;
+  }
+  const overItem = treeFormatted.map[overId];
+  const overItemParent = treeFormatted.map[overItem.parentId];
+  let dummyItem = overItemParent;
+  while (dummyItem) {
+    if (dummyItem.id === activeId) {
+      return false;
+    }
+    dummyItem = treeFormatted.map[dummyItem.parentId];
+  }
+  return true;
+}
+
 export const SortableItem = (props: TProps) => {
-  const { title, depth, onClick, id, overId } = props;
+  const { title, depth, onClick, id, overId, activeId } = props;
+  const tree = useTreeStore((store) => store.tree);
 
   const { setNodeRef: setCenterDroppableNodeRef, isOver: isOverCenter } =
     useDroppable({
@@ -51,14 +73,23 @@ export const SortableItem = (props: TProps) => {
       {overId === id && (
         <div
           ref={setUpperDroppableNodeRef}
-          style={{ height: "25%", background: isOverUpper ? "blue" : "" }}
+          style={{
+            height: "25%",
+            background:
+              isOverUpper && isDroppableNeeded(tree, activeId, overId)
+                ? "blue"
+                : "",
+          }}
         ></div>
       )}
       <div
         ref={setCenterDroppableNodeRef}
         style={{
           height: overId === id ? "50%" : "100%",
-          background: isOverCenter ? "red" : "",
+          background:
+            isOverCenter && isDroppableNeeded(tree, activeId, overId)
+              ? "red"
+              : "",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-around",
@@ -69,7 +100,13 @@ export const SortableItem = (props: TProps) => {
       {overId === id && (
         <div
           ref={setLowerDroppableNodeRef}
-          style={{ height: "25%", background: isOverLower ? "green" : "" }}
+          style={{
+            height: "25%",
+            background:
+              isOverLower && isDroppableNeeded(tree, activeId, overId)
+                ? "green"
+                : "",
+          }}
           hidden={overId !== id}
         ></div>
       )}

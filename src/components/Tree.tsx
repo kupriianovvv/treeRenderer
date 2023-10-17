@@ -88,6 +88,7 @@ export const Tree = () => {
           title={item.title}
           id={item.id}
           overId={overId}
+          activeId={activeId}
         />
       ))}
       <DragOverlay dropAnimation={null}>
