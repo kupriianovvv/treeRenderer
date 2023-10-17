@@ -67,8 +67,7 @@ export const Tree = () => {
   });
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: {
-      delay: 250,
-      tolerance: 5,
+      distance: 10,
     },
   });
 
