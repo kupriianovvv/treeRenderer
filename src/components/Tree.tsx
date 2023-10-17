@@ -91,7 +91,9 @@ export const Tree = () => {
         />
       ))}
       <DragOverlay dropAnimation={null}>
-        {activeId ? <Item id={activeId} title="tasdsda" /> : null}
+        {activeId ? (
+          <Item id={activeId} title={tree.map[activeId].title} />
+        ) : null}
       </DragOverlay>
     </DndContext>
   );
