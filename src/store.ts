@@ -31,9 +31,19 @@ type Actions = {
   ) => void;
 };
 
-const useTreeStore = create<{ tree: TreeFormatted } & Actions>()(
+const useTreeStore = create()(
   immer((set, get) => ({
     tree: getFormattedTree(rawTree),
+    fetchTree: async () => {
+      try {
+        const res = await fetch("http://localhost:8080/tree");
+        const json = await res.json();
+        if (!res.ok) throw new Error("WTF");
+        set({ tree: getFormattedTree(json) });
+      } catch (err) {
+        console.log(err);
+      }
+    },
     log: () => {
       console.log(get());
     },

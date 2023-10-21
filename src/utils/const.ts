@@ -1,6 +1,4 @@
 export const rawTree = [
-  { id: 1, title: "a", children: [{ id: 4, title: "d", children: [] }] },
-  { id: 2, title: "b", children: [] },
   {
     id: 3,
     title: "c",
