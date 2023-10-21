@@ -22,6 +22,7 @@ export const Tree = () => {
   const onToggleElement = useTreeStore((store) => store.onToggleElement);
   const handleDrag = useTreeStore((store) => store.handleDrag);
   const fetchTree = useTreeStore((store) => store.fetchTree);
+  const fetchChildren = useTreeStore((store) => store.fetchChildren);
   const renderTree = getRenderTree(tree.map, tree.map[-1000].children);
   //const { handleDrag } = useDnd();
   const [activeId, setActiveId] = useState<number | null>(null);
@@ -29,6 +30,8 @@ export const Tree = () => {
   const [position, setPosition] = useState<"upper" | "center" | "lower" | null>(
     null
   );
+
+  console.log(tree);
 
   const onDragStart = (e: DragStartEvent) => {
     const { active } = e;
@@ -87,7 +90,7 @@ export const Tree = () => {
     >
       {renderTree.map((item) => (
         <SortableItem
-          onClick={() => onToggleElement(item.id)}
+          onClick={() => fetchChildren(item.id)}
           key={item.id}
           depth={item.depth}
           title={item.title}

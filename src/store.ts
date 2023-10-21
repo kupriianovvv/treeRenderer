@@ -44,6 +44,22 @@ const useTreeStore = create()(
         console.log(err);
       }
     },
+    fetchChildren: async (parentId) => {
+      try {
+        const res = await fetch(`http://localhost:8080/tree/${parentId}`);
+        const json = await res.json();
+        if (!res.ok) throw new Error("WTF");
+        set((state) => {
+          state.tree.map[parentId].children = json.map((json) => json.id);
+          state.tree.map[parentId].isExpanded = true;
+          for (const child of json) {
+            state.tree.map[child.id] = child;
+          }
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    },
     log: () => {
       console.log(get());
     },
