@@ -18,17 +18,16 @@ const getRootNodes = (rawTree) => {
   return rootNodes;
 };
 
+let childrenNodes;
 const getChildrenNodes = (rawTree, id) => {
-  const childrenNodes = [];
   for (const node of rawTree) {
-    if (node.id !== id) {
-      if (node.children.length === 0) {
-        continue;
-      }
-      getChildrenNodes(node.children, id);
-    } else {
-      return node.children.map((child) => ({ ...child, children: [] }));
+    if (node.id === id) {
+      childrenNodes = node.children.map((child) => ({
+        ...child,
+        children: [],
+      }));
     }
+    getChildrenNodes(node.children, id);
   }
   return childrenNodes;
 };
