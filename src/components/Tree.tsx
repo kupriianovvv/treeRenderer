@@ -13,7 +13,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useTreeStore } from "../store";
 import { getRenderTree } from "../utils/getRenderTree";
 
@@ -88,17 +88,21 @@ export const Tree = () => {
       onDragOver={onDragOver}
       onDragEnd={onDragEnd}
     >
-      {renderTree.map((item) => (
-        <SortableItem
-          onClick={() => onToggleElement(item.id)}
-          key={item.id}
-          depth={item.depth}
-          title={item.title}
-          id={item.id}
-          overId={overId}
-          activeId={activeId}
-        />
-      ))}
+      {renderTree.map((item) => {
+        return (
+          <Fragment key={item.id}>
+            <span>{item.isExpanded ? "expanded" : "closed"}</span>
+            <SortableItem
+              onClick={() => onToggleElement(item.id)}
+              depth={item.depth}
+              title={item.title}
+              id={item.id}
+              overId={overId}
+              activeId={activeId}
+            />
+          </Fragment>
+        );
+      })}
       <DragOverlay dropAnimation={null}>
         {activeId ? (
           <Item id={activeId} title={tree.map[activeId].title} />
