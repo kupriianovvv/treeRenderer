@@ -90,7 +90,7 @@ export const Tree = () => {
     >
       {renderTree.map((item) => (
         <SortableItem
-          onClick={() => fetchChildren(item.id)}
+          onClick={() => onToggleElement(item.id)}
           key={item.id}
           depth={item.depth}
           title={item.title}

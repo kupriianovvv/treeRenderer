@@ -65,7 +65,12 @@ const useTreeStore = create()(
     },
     onToggleElement: (id: number) =>
       set((state) => {
+        console.log("first", state.tree.map[id].isExpanded);
         state.tree.map[id].isExpanded = !state.tree.map[id].isExpanded;
+        console.log("second", state.tree.map[id].isExpanded);
+        if (state.tree.map[id].isExpanded) {
+          get().fetchChildren(id);
+        }
       }),
     handleUpperDrag: (activeId: number, overId: number) =>
       set((state) => {
