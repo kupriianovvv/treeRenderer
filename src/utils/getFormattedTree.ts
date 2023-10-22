@@ -40,6 +40,7 @@ export const getFormattedTree = (
       children,
       parentId,
       isExpanded: false,
+      isChildrenLoaded: false,
     };
     if (formattedTreeNode.parentId === null) {
       rootIds.push(formattedTreeNode.id);

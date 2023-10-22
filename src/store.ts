@@ -45,6 +45,9 @@ const useTreeStore = create()(
       }
     },
     fetchChildren: async (parentId) => {
+      const state = get();
+      const parentItem = state.tree.map[parentId];
+      if (parentItem.isChildrenLoaded) return state;
       try {
         const res = await fetch(`http://localhost:8080/tree/${parentId}`);
         const json = await res.json();
@@ -52,8 +55,12 @@ const useTreeStore = create()(
         set((state) => {
           state.tree.map[parentId].children = json.map((json) => json.id);
           state.tree.map[parentId].isExpanded = true;
+          state.tree.map[parentId].isChildrenLoaded = true;
           for (const child of json) {
             state.tree.map[child.id] = child;
+            child.parentId = parentId;
+            child.isExpanded = false;
+            child.isChildrenLoaded = false;
           }
         });
       } catch (err) {
@@ -65,9 +72,7 @@ const useTreeStore = create()(
     },
     onToggleElement: (id: number) =>
       set((state) => {
-        console.log("first", state.tree.map[id].isExpanded);
         state.tree.map[id].isExpanded = !state.tree.map[id].isExpanded;
-        console.log("second", state.tree.map[id].isExpanded);
         if (state.tree.map[id].isExpanded) {
           get().fetchChildren(id);
         }
