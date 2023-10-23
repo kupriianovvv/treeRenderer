@@ -6,12 +6,20 @@ import { addUpperNeighbor } from "./utils/addUpperNeighbor";
 import { addLowerNeighbor } from "./utils/addLowerNeighbor";
 import { addMiddleNeighbor } from "./utils/addMiddleNeighbor";
 
+export type TreeResponseNode = {
+  id: number;
+  title: string;
+  children: TreeResponseNode[];
+};
+export type TreeResponse = TreeResponseNode[];
+
 export type TreeFormattedNode = {
   id: number;
   title: string;
   children: number[];
   isExpanded: boolean;
   parentId: number;
+  isChildrenLoaded: boolean;
 };
 
 export type TreeFormatted = {
@@ -31,61 +39,79 @@ type Actions = {
   ) => void;
 };
 
-const useTreeStore = create()(
+type TreeStore = {
+  tree: TreeFormatted;
+  fetchTree: () => void;
+  fetchChildrenByParentId: (parentId: number) => void;
+  onToggleElement: (id: number) => void;
+  handleUpperDrag: (activeId: number, overId: number) => void;
+  handleCenterDrag: (activeId: number, overId: number) => void;
+  handleLowerDrag: (activeId: number, overId: number) => void;
+  handleDrag: (
+    activeId: number,
+    overId: number,
+    position: "upper" | "center" | "lower"
+  ) => void;
+};
+
+const useTreeStore = create<TreeStore>()(
   immer((set, get) => ({
     tree: getFormattedTree(rawTree),
     fetchTree: async () => {
       try {
         const res = await fetch("http://localhost:8080/tree");
-        const json = await res.json();
         if (!res.ok) throw new Error("WTF");
-        set({ tree: getFormattedTree(json) });
+        const tree: TreeResponse = await res.json();
+        set({ tree: getFormattedTree(tree) });
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     },
-    fetchChildren: async (parentId) => {
-      const state = get();
-      const parentItem = state.tree.map[parentId];
-      if (parentItem.isChildrenLoaded) return state;
+    fetchChildrenByParentId: async (parentId: number) => {
+      const parentItem = get().tree.map[parentId];
+      if (parentItem.isChildrenLoaded) return;
       try {
         const res = await fetch(`http://localhost:8080/tree/${parentId}`);
-        const json = await res.json();
+        const children: {
+          id: number;
+          title: string;
+          children: [];
+          parentId: number;
+          isExpanded: false;
+          isChildrenLoaded: false;
+        }[] = await res.json();
         if (!res.ok) throw new Error("WTF");
-        set((state) => {
-          state.tree.map[parentId].children = json.map((json) => json.id);
-          state.tree.map[parentId].isExpanded = true;
-          state.tree.map[parentId].isChildrenLoaded = true;
-          for (const child of json) {
-            state.tree.map[child.id] = child;
+        set(({ tree: { map } }) => {
+          map[parentId].children = children.map((child) => child.id);
+          map[parentId].isExpanded = true;
+          map[parentId].isChildrenLoaded = true;
+          for (const child of children) {
             child.parentId = parentId;
             child.isExpanded = false;
             child.isChildrenLoaded = false;
+            map[child.id] = child;
           }
         });
       } catch (err) {
         console.log(err);
       }
     },
-    log: () => {
-      console.log(get());
-    },
     onToggleElement: (id: number) =>
-      set((state) => {
-        state.tree.map[id].isExpanded = !state.tree.map[id].isExpanded;
-        if (state.tree.map[id].isExpanded) {
-          get().fetchChildren(id);
+      set(({ tree: { map }, fetchChildrenByParentId }) => {
+        map[id].isExpanded = !map[id].isExpanded;
+        if (map[id].isExpanded) {
+          fetchChildrenByParentId(id);
         }
       }),
     handleUpperDrag: (activeId: number, overId: number) =>
-      set((state) => {
-        addUpperNeighbor(state.tree, activeId, overId);
+      set(({ tree }) => {
+        addUpperNeighbor(tree, activeId, overId);
       }),
     handleCenterDrag: (activeId: number, overId: number) =>
-      set((state) => addMiddleNeighbor(state.tree, activeId, overId)),
+      set(({ tree }) => addMiddleNeighbor(tree, activeId, overId)),
     handleLowerDrag: (activeId: number, overId: number) =>
-      set((state) => {
-        addLowerNeighbor(state.tree, activeId, overId);
+      set(({ tree }) => {
+        addLowerNeighbor(tree, activeId, overId);
       }),
     handleDrag: (
       activeId: number,

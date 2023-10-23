@@ -5,6 +5,7 @@ type TreeRenderNode = {
   title: string;
   children: number[];
   depth: number;
+  isExpanded: boolean;
 };
 
 type TreeRender = TreeRenderNode[];

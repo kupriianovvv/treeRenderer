@@ -9,16 +9,18 @@ type TProps = {
   title: string;
   id: number;
   overId: number | null;
+  activeId: number | null;
 };
 
 function isDroppableNeeded(
   treeFormatted: TreeFormatted,
-  activeId: number,
-  overId: number
+  activeId: number | null,
+  overId: number | null
 ) {
   if (activeId === overId) {
     return false;
   }
+  if (activeId === null || overId === null) return false;
   const overItem = treeFormatted.map[overId];
   const overItemParent = treeFormatted.map[overItem.parentId];
   let dummyItem = overItemParent;
