@@ -62,11 +62,14 @@ const useTreeStore = create<TreeStore>()(
           fetchChildrenByParentId(id);
         }
       }),
-    handleDrag: (
+    handleDrag: async (
       activeId: number,
       overId: number,
       position: "upper" | "center" | "lower"
     ) => {
+      if (position === "center") {
+        await get().fetchChildrenByParentId(overId);
+      }
       set(({ tree }) =>
         dragAndDropService.handleDrag(tree, activeId, overId, position)
       );
