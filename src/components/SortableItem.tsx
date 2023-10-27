@@ -1,7 +1,8 @@
 import { useDroppable, useDraggable } from "@dnd-kit/core";
 import { Item } from "./Item";
 import { CSS } from "@dnd-kit/utilities";
-import { TreeFormatted, useTreeStore } from "../store";
+import { useTreeStore } from "../store";
+import { TreeFormatted } from "../entities/TreeFormatted";
 
 type TProps = {
   depth: number;

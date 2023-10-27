@@ -1,26 +1,12 @@
-import { TreeFormattedNode } from "./../store";
-type TreeRenderNode = {
-  id: number;
-  title: string;
-  children: number[];
-  depth: number;
-};
-
-type TreeRender = TreeRenderNode[];
-
-export type TreeResponseNode = {
-  id: number;
-  title: string;
-  children: TreeResponseNode[];
-};
-export type TreeResponse = TreeResponseNode[];
+import { TreeFormattedNodeMap } from "../entities/TreeFormatted";
+import { TreeResponse } from "../entities/TreeResponse";
 
 export const getFormattedTree = (
   rawTree: TreeResponse,
   rootIds: number[] = [],
   //@ts-ignore
   parentId: number = null,
-  map: Record<number, TreeFormattedNode> = {
+  map: TreeFormattedNodeMap = {
     [-1000]: {
       id: -1000,
       title: "root",

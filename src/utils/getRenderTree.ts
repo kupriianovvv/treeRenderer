@@ -1,17 +1,8 @@
-import { TreeFormattedNode } from "./../store";
-
-type TreeRenderNode = {
-  id: number;
-  title: string;
-  children: number[];
-  depth: number;
-  isExpanded: boolean;
-};
-
-type TreeRender = TreeRenderNode[];
+import { TreeFormattedNodeMap } from "../entities/TreeFormatted";
+import { TreeRender } from "../entities/TreeRender";
 
 export const getRenderTree = (
-  itemsMap: Record<number, TreeFormattedNode>,
+  itemsMap: TreeFormattedNodeMap,
   itemsIds: number[],
   renderTree: TreeRender = [],
   depth = 1

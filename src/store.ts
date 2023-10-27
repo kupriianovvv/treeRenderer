@@ -2,51 +2,16 @@ import { create } from "zustand";
 import { getFormattedTree } from "./utils/getFormattedTree";
 import { rawTree } from "./utils/const";
 import { immer } from "zustand/middleware/immer";
-import { addUpperNeighbor } from "./utils/addUpperNeighbor";
-import { addLowerNeighbor } from "./utils/addLowerNeighbor";
-import { addMiddleNeighbor } from "./utils/addMiddleNeighbor";
-
-export type TreeResponseNode = {
-  id: number;
-  title: string;
-  children: TreeResponseNode[];
-};
-export type TreeResponse = TreeResponseNode[];
-
-export type TreeFormattedNode = {
-  id: number;
-  title: string;
-  children: number[];
-  isExpanded: boolean;
-  parentId: number;
-  isChildrenLoaded: boolean;
-};
-
-export type TreeFormatted = {
-  rootIds: number[];
-  map: Record<number, TreeFormattedNode>;
-};
-
-type Actions = {
-  onToggleElement: (id: number) => void;
-  handleUpperDrag: (activeId: number, overId: number) => void;
-  handleCenterDrag: (activeId: number, overId: number) => void;
-  handleLowerDrag: (activeId: number, overId: number) => void;
-  handleDrag: (
-    activeId: number,
-    overId: number,
-    position: "upper" | "center" | "lower"
-  ) => void;
-};
+import { dragAndDropService } from "./services/DragAndDropService";
+import { TreeFormatted } from "./entities/TreeFormatted";
+import { TreeResponse } from "./entities/TreeResponse";
+import { treeCRUDService } from "./services/TreeCRUDService";
 
 type TreeStore = {
   tree: TreeFormatted;
   fetchTree: () => void;
   fetchChildrenByParentId: (parentId: number) => void;
   onToggleElement: (id: number) => void;
-  handleUpperDrag: (activeId: number, overId: number) => void;
-  handleCenterDrag: (activeId: number, overId: number) => void;
-  handleLowerDrag: (activeId: number, overId: number) => void;
   handleDrag: (
     activeId: number,
     overId: number,
@@ -59,10 +24,9 @@ const useTreeStore = create<TreeStore>()(
     tree: getFormattedTree(rawTree),
     fetchTree: async () => {
       try {
-        const res = await fetch("http://localhost:8080/tree");
-        if (!res.ok) throw new Error("WTF");
-        const tree: TreeResponse = await res.json();
-        set({ tree: getFormattedTree(tree) });
+        const formattedTree = await treeCRUDService.fetchTree();
+        if (formattedTree === null) return;
+        set({ tree: formattedTree });
       } catch (err) {
         console.error(err);
       }
@@ -71,20 +35,15 @@ const useTreeStore = create<TreeStore>()(
       const parentItem = get().tree.map[parentId];
       if (parentItem.isChildrenLoaded) return;
       try {
-        const res = await fetch(`http://localhost:8080/tree/${parentId}`);
-        const children: {
-          id: number;
-          title: string;
-          children: [];
-          parentId: number;
-          isExpanded: false;
-          isChildrenLoaded: false;
-        }[] = await res.json();
-        if (!res.ok) throw new Error("WTF");
+        const children = await treeCRUDService.fetchChildrenByParentId(
+          parentId
+        );
+        if (children === null) return;
         set(({ tree: { map } }) => {
-          map[parentId].children = children.map((child) => child.id);
-          map[parentId].isExpanded = true;
-          map[parentId].isChildrenLoaded = true;
+          const parentItem = map[parentId];
+          parentItem.children = children.map((child) => child.id);
+          parentItem.isExpanded = true;
+          parentItem.isChildrenLoaded = true;
           for (const child of children) {
             child.parentId = parentId;
             child.isExpanded = false;
@@ -103,30 +62,14 @@ const useTreeStore = create<TreeStore>()(
           fetchChildrenByParentId(id);
         }
       }),
-    handleUpperDrag: (activeId: number, overId: number) =>
-      set(({ tree }) => {
-        addUpperNeighbor(tree, activeId, overId);
-      }),
-    handleCenterDrag: (activeId: number, overId: number) =>
-      set(({ tree }) => addMiddleNeighbor(tree, activeId, overId)),
-    handleLowerDrag: (activeId: number, overId: number) =>
-      set(({ tree }) => {
-        addLowerNeighbor(tree, activeId, overId);
-      }),
     handleDrag: (
       activeId: number,
       overId: number,
       position: "upper" | "center" | "lower"
     ) => {
-      if (position === "upper") {
-        get().handleUpperDrag(activeId, overId);
-      } else if (position === "center") {
-        get().handleCenterDrag(activeId, overId);
-      } else if (position === "lower") {
-        get().handleLowerDrag(activeId, overId);
-      } else {
-        throw new Error("WTF");
-      }
+      set(({ tree }) =>
+        dragAndDropService.handleDrag(tree, activeId, overId, position)
+      );
     },
   }))
 );
