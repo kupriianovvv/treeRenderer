@@ -13,7 +13,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useMemo } from "react";
 import { useTreeStore } from "../store";
 import { getRenderTree } from "../utils/getRenderTree";
 
@@ -25,7 +25,10 @@ export const Tree = () => {
   const fetchChildrenByParentId = useTreeStore(
     (store) => store.fetchChildrenByParentId
   );
-  const renderTree = getRenderTree(tree.map, tree.map[-1000].children);
+  const renderTree = useMemo(
+    () => getRenderTree(tree.map, tree.map[-1000].children),
+    [tree.map]
+  );
   //const { handleDrag } = useDnd();
   const [activeId, setActiveId] = useState<number | null>(null);
   const [overId, setOverId] = useState<number | null>(null);
