@@ -3,6 +3,7 @@ import { Item } from "./Item";
 import { CSS } from "@dnd-kit/utilities";
 import { useTreeStore } from "../store";
 import { TreeFormatted } from "../entities/TreeFormatted";
+import { useMemo } from "react";
 
 type TProps = {
   depth: number;
@@ -13,7 +14,7 @@ type TProps = {
   activeId: number | null;
 };
 
-function isDroppableNeeded(
+function getIsDroppableNeeded(
   treeFormatted: TreeFormatted,
   activeId: number | null,
   overId: number | null
@@ -38,6 +39,10 @@ export const SortableItem = (props: TProps) => {
   const { title, depth, onClick, id, overId, activeId } = props;
   const tree = useTreeStore((store) => store.tree);
 
+  const isDroppableNeeded = useMemo(
+    () => getIsDroppableNeeded(tree, activeId, overId),
+    [tree, activeId, overId]
+  );
   const { setNodeRef: setCenterDroppableNodeRef, isOver: isOverCenter } =
     useDroppable({
       id: `${id}-center`,
@@ -78,10 +83,7 @@ export const SortableItem = (props: TProps) => {
           ref={setUpperDroppableNodeRef}
           style={{
             height: "25%",
-            background:
-              isOverUpper && isDroppableNeeded(tree, activeId, overId)
-                ? "blue"
-                : "",
+            background: isOverUpper && isDroppableNeeded ? "blue" : "",
           }}
         ></div>
       )}
@@ -89,10 +91,7 @@ export const SortableItem = (props: TProps) => {
         ref={setCenterDroppableNodeRef}
         style={{
           height: overId === id ? "50%" : "100%",
-          background:
-            isOverCenter && isDroppableNeeded(tree, activeId, overId)
-              ? "red"
-              : "",
+          background: isOverCenter && isDroppableNeeded ? "red" : "",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-around",
@@ -105,10 +104,7 @@ export const SortableItem = (props: TProps) => {
           ref={setLowerDroppableNodeRef}
           style={{
             height: "25%",
-            background:
-              isOverLower && isDroppableNeeded(tree, activeId, overId)
-                ? "green"
-                : "",
+            background: isOverLower && isDroppableNeeded ? "green" : "",
           }}
           hidden={overId !== id}
         ></div>
