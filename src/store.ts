@@ -2,10 +2,10 @@ import { create } from "zustand";
 import { getFormattedTree } from "./utils/getFormattedTree";
 import { rawTree } from "./utils/const";
 import { immer } from "zustand/middleware/immer";
-import { dragAndDropService } from "./services/DragAndDropService";
+import { handleDrag } from "./services/DragAndDropService";
 import { TreeFormatted } from "./entities/TreeFormatted";
 import { TreeResponse } from "./entities/TreeResponse";
-import { treeCRUDService } from "./services/TreeCRUDService";
+import { fetchTree, fetchChildrenByParentId } from "./services/TreeCRUDService";
 
 type TreeStore = {
   tree: TreeFormatted;
@@ -24,7 +24,7 @@ const useTreeStore = create<TreeStore>()(
     tree: getFormattedTree(rawTree),
     fetchTree: async () => {
       try {
-        const formattedTree = await treeCRUDService.fetchTree();
+        const formattedTree = await fetchTree();
         if (formattedTree === null) return;
         set({ tree: formattedTree });
       } catch (err) {
@@ -35,9 +35,7 @@ const useTreeStore = create<TreeStore>()(
       const parentItem = get().tree.map[parentId];
       if (parentItem.isChildrenLoaded) return;
       try {
-        const children = await treeCRUDService.fetchChildrenByParentId(
-          parentId
-        );
+        const children = await fetchChildrenByParentId(parentId);
         if (children === null) return;
         set(({ tree: { map } }) => {
           const parentItem = map[parentId];
@@ -52,7 +50,7 @@ const useTreeStore = create<TreeStore>()(
           }
         });
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     },
     onToggleElement: (id: number) =>
@@ -70,9 +68,7 @@ const useTreeStore = create<TreeStore>()(
       if (position === "center") {
         await get().fetchChildrenByParentId(overId);
       }
-      set(({ tree }) =>
-        dragAndDropService.handleDrag(tree, activeId, overId, position)
-      );
+      set(({ tree }) => handleDrag(tree, activeId, overId, position));
     },
   }))
 );

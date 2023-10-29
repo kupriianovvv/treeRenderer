@@ -33,8 +33,6 @@ export const Tree = () => {
     null
   );
 
-  console.log(tree);
-
   const onDragStart = (e: DragStartEvent) => {
     const { active } = e;
     setActiveId(+active.id);
@@ -42,7 +40,6 @@ export const Tree = () => {
 
   const onDragOver = (e: DragOverEvent) => {
     const { over } = e;
-    console.log(over);
     if (over !== null) {
       const [id, position] = over.id.toString().split("-") as [
         string,
