@@ -58,12 +58,11 @@ const rawTree = [
 
 app.use(cors());
 
-app.get("/tree", (req, res) => {
-  res.send(getRootNodes(rawTree));
-});
-
-app.get("/tree/:parentId", (req, res) => {
-  const response = getChildrenNodes(rawTree, +req.params.parentId);
+app.get("/tree/:parentId?", (req, res) => {
+  const response =
+    req.params.parentId === undefined
+      ? getRootNodes(rawTree)
+      : getChildrenNodes(rawTree, +req.params.parentId);
   res.send(response);
 });
 
