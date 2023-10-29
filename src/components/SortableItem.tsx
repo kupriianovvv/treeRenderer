@@ -106,7 +106,6 @@ export const SortableItem = (props: TProps) => {
             height: "25%",
             background: isOverLower && isDroppableNeeded ? "green" : "",
           }}
-          hidden={overId !== id}
         ></div>
       )}
     </div>
