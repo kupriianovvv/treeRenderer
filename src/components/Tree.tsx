@@ -22,9 +22,6 @@ export const Tree = () => {
   const onToggleElement = useTreeStore((store) => store.onToggleElement);
   const handleDrag = useTreeStore((store) => store.handleDrag);
   const fetchTree = useTreeStore((store) => store.fetchTree);
-  const fetchChildrenByParentId = useTreeStore(
-    (store) => store.fetchChildrenByParentId
-  );
   const renderTree = useMemo(
     () => getRenderTree(tree.map, tree.map[-1000].children),
     [tree.map]
