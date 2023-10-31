@@ -5,8 +5,10 @@ import { immer } from "zustand/middleware/immer";
 import { handleDrag } from "./services/DragAndDropService";
 import { TreeFormatted, TreeFormattedNode } from "./entities/TreeFormatted";
 import { fetchTree } from "./services/TreeCRUDService";
+import { connectChildrenToParent } from "./utils/connectChildrenToParent";
+import { isLoadingNeeded } from "./utils/isLoadingNeeded";
 
-type TreeStore = {
+export type TreeStore = {
   tree: TreeFormatted;
   fetchTree: (id?: number) => void;
   onToggleElement: (id: number) => void;
@@ -22,30 +24,14 @@ const useTreeStore = create<TreeStore>()(
     tree: getFormattedTree(rawTree),
     fetchTree: async (parentId?: number) => {
       const map = get().tree.map;
-      if (parentId !== undefined && map[parentId].isChildrenLoaded) {
-        return;
-      }
+      if (!isLoadingNeeded(parentId, map)) return;
       try {
         const rawTree = await fetchTree(parentId);
         if (parentId === undefined) {
           return set({ tree: getFormattedTree(rawTree) });
         }
         set(({ tree: { map } }) => {
-          const parentItem = map[parentId];
-          parentItem.children = rawTree.map((child) => child.id);
-          parentItem.isExpanded = true;
-          parentItem.isChildrenLoaded = true;
-          for (const child of rawTree) {
-            const childFormatted: TreeFormattedNode = {
-              id: child.id,
-              title: child.title,
-              children: [],
-              parentId: parentId,
-              isExpanded: false,
-              isChildrenLoaded: false,
-            };
-            map[childFormatted.id] = childFormatted;
-          }
+          connectChildrenToParent(map, parentId, rawTree);
         });
       } catch (err) {
         console.error(err);
