@@ -10,7 +10,8 @@
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
     "lint": "eslint \"src/**/*.{js,jsx}\" --quiet",
     "server": "node src/backend/src/index.js",
-    "deva": "npm run server && npm run dev"
+    "deva": "npm run server && npm run dev",
+    "test": "vitest"
   },
   "keywords": [],
   "author": "Alexandr Kupriianov",
@@ -23,7 +24,8 @@
     "eslint-config-prettier": "8.5.0",
     "prettier": "2.7.1",
     "typescript": "^5.1.6",
-    "vite": "3.1.4"
+    "vite": "3.1.4",
+    "vitest": "^1.1.3"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.0.8",
