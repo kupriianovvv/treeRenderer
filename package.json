@@ -10,7 +10,7 @@
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
     "lint": "eslint \"src/**/*.{js,jsx}\" --quiet",
     "server": "node src/backend/src/index.js",
-    "deva": "npm run server && npm run dev",
+    "deva": "npm run dev & npm run server",
     "test": "vitest"
   },
   "keywords": [],

@@ -19,3 +19,5 @@ export const rawTree = [
     ],
   },
 ];
+
+export const virtualNodeId = -1000;

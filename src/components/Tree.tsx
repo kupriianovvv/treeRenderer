@@ -22,10 +22,7 @@ export const Tree = () => {
   const onToggleElement = useTreeStore((store) => store.onToggleElement);
   const handleDrag = useTreeStore((store) => store.handleDrag);
   const fetchTree = useTreeStore((store) => store.fetchTree);
-  const renderTree = useMemo(
-    () => getRenderTree(tree.map, tree.map[-1000].children),
-    [tree.map]
-  );
+  const renderTree = useMemo(() => getRenderTree(tree.map), [tree.map]);
   //const { handleDrag } = useDnd();
   const [activeId, setActiveId] = useState<number | null>(null);
   const [overId, setOverId] = useState<number | null>(null);
