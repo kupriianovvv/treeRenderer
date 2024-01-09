@@ -3,12 +3,26 @@ import { TreeRender } from "../entities/TreeRender";
 import { virtualNodeId } from "./const";
 
 export const getRenderTree = (itemsMap: TreeFormattedNodeMap) => {
-  const getRenderTreeInner = (
-    itemsMap: TreeFormattedNodeMap,
-    itemsIds: number[],
-    renderTree: TreeRender,
-    depth: number
-  ) => {
+  const getRenderTreeInner = ({
+    itemsMap,
+    itemsIds,
+    renderTree,
+    depth,
+  }: {
+    itemsMap: TreeFormattedNodeMap;
+    renderTree?: TreeRender;
+    depth?: number;
+    itemsIds?: number[];
+  }) => {
+    if (itemsIds === undefined) {
+      itemsIds = itemsMap[virtualNodeId].children;
+    }
+    if (depth === undefined) {
+      depth = 1;
+    }
+    if (renderTree === undefined) {
+      renderTree = [];
+    }
     for (const itemId of itemsIds) {
       const nodeFormatted = itemsMap[itemId];
       const { id, title, children, isExpanded } = nodeFormatted;
@@ -17,16 +31,16 @@ export const getRenderTree = (itemsMap: TreeFormattedNodeMap) => {
       renderTree.push(renderNode);
 
       if (renderNode.children.length !== 0 && renderNode.isExpanded) {
-        getRenderTreeInner(
+        getRenderTreeInner({
           itemsMap,
-          renderNode.children,
           renderTree,
-          depth + 1
-        );
+          itemsIds: renderNode.children,
+          depth: depth + 1,
+        });
       }
     }
     return renderTree;
   };
 
-  return getRenderTreeInner(itemsMap, itemsMap[virtualNodeId].children, [], 1);
+  return getRenderTreeInner({ itemsMap });
 };
