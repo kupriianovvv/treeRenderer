@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { getRenderTree } from "./getRenderTree";
+import { virtualNodeId } from "./const";
 
 describe("getRenderTree", () => {
   test("getRenderTree", () => {
@@ -8,7 +9,7 @@ describe("getRenderTree", () => {
         id: 1,
         title: "a",
         children: [],
-        parentId: -1000,
+        parentId: virtualNodeId,
         isExpanded: false,
         isChildrenLoaded: false,
       },
@@ -16,7 +17,7 @@ describe("getRenderTree", () => {
         id: 2,
         title: "b",
         children: [],
-        parentId: -1000,
+        parentId: virtualNodeId,
         isExpanded: false,
         isChildrenLoaded: false,
       },
@@ -24,15 +25,15 @@ describe("getRenderTree", () => {
         id: 3,
         title: "c",
         children: [],
-        parentId: -1000,
+        parentId: virtualNodeId,
         isExpanded: false,
         isChildrenLoaded: false,
       },
-      "-1000": {
-        id: -1000,
+      [virtualNodeId]: {
+        id: virtualNodeId,
         title: "root",
         children: [1, 2, 3],
-        parentId: -1000,
+        parentId: virtualNodeId,
         isExpanded: true,
         isChildrenLoaded: true,
       },

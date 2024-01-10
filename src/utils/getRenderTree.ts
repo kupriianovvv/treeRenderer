@@ -23,6 +23,7 @@ export const getRenderTree = (itemsMap: TreeFormattedNodeMap) => {
     if (renderTree === undefined) {
       renderTree = [];
     }
+
     for (const itemId of itemsIds) {
       const nodeFormatted = itemsMap[itemId];
       const { id, title, children, isExpanded } = nodeFormatted;
