@@ -5,7 +5,7 @@ import { useTreeStore } from "../store";
 import { TreeFormatted } from "../entities/TreeFormatted";
 import { useMemo } from "react";
 
-type TProps = {
+type SortableItemProps = {
   depth: number;
   onClick: (e: React.MouseEvent) => void;
   title: string;
@@ -35,7 +35,7 @@ function getIsDroppableNeeded(
   return true;
 }
 
-export const SortableItem = (props: TProps) => {
+export const SortableItem = (props: SortableItemProps) => {
   const { title, depth, onClick, id, overId, activeId } = props;
   const tree = useTreeStore((store) => store.tree);
 

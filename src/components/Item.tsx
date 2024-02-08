@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
 
-type TProps = {
+type ItemProps = {
   depth?: number;
   onClick?: (e: React.MouseEvent) => void;
   title: string;
@@ -8,7 +8,7 @@ type TProps = {
   style?: CSSProperties;
 };
 
-export const Item = (props: TProps) => {
+export const Item = (props: ItemProps) => {
   const { title, depth = 0, onClick, id, style } = props;
 
   return (
