@@ -21,7 +21,7 @@ export type TreeStore = {
 
 const useTreeStore = create<TreeStore>()(
   immer((set, get) => ({
-    tree: getFormattedTree(rawTree),
+    tree: {rootIds: [], map: {}},
     fetchTree: async (parentId?: number) => {
       const map = get().tree.map;
       if (!isLoadingNeeded(parentId, map)) return;

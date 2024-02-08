@@ -42,6 +42,8 @@ export const getRenderTree = (itemsMap: TreeFormattedNodeMap) => {
     }
     return renderTree;
   };
-
+  if (Object.keys(itemsMap).length === 0) {
+    return []
+  }
   return getRenderTreeInner({ itemsMap });
 };
