@@ -1,4 +1,5 @@
 import { TreeFormatted } from "../entities/TreeFormatted";
+import { isChildren } from "../utils/canBeDragged";
 
 const handleDrag = (
   treeFormatted: TreeFormatted,
@@ -31,12 +32,8 @@ const addUpperNeighbor = (
   const activeItemParent = treeFormatted.map[activeItem.parentId];
   const overItemParent = treeFormatted.map[overItem.parentId];
 
-  let dummyItem = overItemParent;
-  while (dummyItem) {
-    if (dummyItem.id === activeId) {
-      return;
-    }
-    dummyItem = treeFormatted.map[dummyItem.parentId];
+  if (isChildren(overItem, activeId, treeFormatted.map)) {
+    return;
   }
 
   activeItemParent.children = activeItemParent.children.filter(
@@ -62,13 +59,8 @@ const addMiddleNeighbor = (
   const activeItem = treeFormatted.map[activeId];
   const overItem = treeFormatted.map[overId];
 
-  const overItemParent = treeFormatted.map[overItem.parentId];
-  let dummyItem = overItemParent;
-  while (dummyItem) {
-    if (dummyItem.id === activeId) {
-      return;
-    }
-    dummyItem = treeFormatted.map[dummyItem.parentId];
+  if (isChildren(overItem, activeId, treeFormatted.map)) {
+    return
   }
 
   const activeItemParent = treeFormatted.map[activeItem.parentId];
@@ -95,12 +87,8 @@ const addLowerNeighbor = (
   const activeItemParent = treeFormatted.map[activeItem.parentId];
   const overItemParent = treeFormatted.map[overItem.parentId];
 
-  let dummyItem = overItemParent;
-  while (dummyItem) {
-    if (dummyItem.id === activeId) {
-      return;
-    }
-    dummyItem = treeFormatted.map[dummyItem.parentId];
+  if (isChildren(overItem, activeId, treeFormatted.map)) {
+    return;
   }
 
   activeItemParent.children = activeItemParent.children.filter(
@@ -110,6 +98,12 @@ const addLowerNeighbor = (
   const overItemIndex = overItemParent.children.findIndex(
     (childId) => childId === overId
   );
+
+  if (overItem.isExpanded) {
+    activeItem.parentId = overItem.id;
+    overItem.children.unshift(activeId)
+    return;
+  }
 
   activeItem.parentId = overItemParent.id;
   overItemParent.children.splice(overItemIndex + 1, 0, activeId);

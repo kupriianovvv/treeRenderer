@@ -4,6 +4,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { useTreeStore } from "../store";
 import { TreeFormatted } from "../entities/TreeFormatted";
 import { useMemo } from "react";
+import { isChildren } from "../utils/canBeDragged";
 
 type SortableItemProps = {
   depth: number;
@@ -24,14 +25,11 @@ function getIsDroppableNeeded(
   }
   if (activeId === null || overId === null) return false;
   const overItem = treeFormatted.map[overId];
-  const overItemParent = treeFormatted.map[overItem.parentId];
-  let dummyItem = overItemParent;
-  while (dummyItem) {
-    if (dummyItem.id === activeId) {
-      return false;
-    }
-    dummyItem = treeFormatted.map[dummyItem.parentId];
+
+  if (isChildren(overItem, activeId, treeFormatted.map)) {
+    return false;
   }
+
   return true;
 }
 
