@@ -2,7 +2,7 @@
 
 A tree view with expand/collapse and full drag-and-drop reordering: drop an item **above** or **below** a node, or **onto** it to nest inside.
 
-Demo: _(add Vercel link here)_
+Demo: https://tree-renderer.vercel.app/
 
 ## What's inside
 
