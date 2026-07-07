@@ -14,8 +14,8 @@ type TProps = {
 
 function isDroppableNeeded(
   treeFormatted: TreeFormatted,
-  activeId: number,
-  overId: number | null 
+  activeId: number | null,
+  overId: number | null
 ) {
   if (activeId === null || overId === null || activeId === overId) {
     return false;
