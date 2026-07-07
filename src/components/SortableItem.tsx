@@ -9,6 +9,7 @@ type TProps = {
   title: string;
   id: number;
   overId: number | null;
+  activeId: number | null; 
 };
 
 function isDroppableNeeded(
