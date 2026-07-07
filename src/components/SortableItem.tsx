@@ -17,7 +17,7 @@ function isDroppableNeeded(
   activeId: number,
   overId: number
 ) {
-  if (activeId === overId) {
+  if (activeId === null || activeId === overId) {   // <- добавить проверку на null
     return false;
   }
   const overItem = treeFormatted.map[overId];
